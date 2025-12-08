@@ -87,8 +87,7 @@ const ForgotPassword = () => {
                     label="Email Address"
                     type="email"
                     placeholder="admin@example.com"
-                    icon={<EmailIcon fontSize="small" />}
-                    iconPosition="start"
+                    leftIcon={<EmailIcon fontSize="small" />}
                     errorMessage={errors.email?.message}
                     {...register('email', {
                       required: 'Email is required',

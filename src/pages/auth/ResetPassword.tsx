@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
@@ -115,7 +116,8 @@ const ResetPassword = () => {
                     label="New Password"
                     type={showPass ? 'text' : 'password'}
                     placeholder="Enter new password"
-                    icon={
+                    leftIcon={<LockIcon fontSize="small" />}
+                    rightIcon={
                       <IconButton
                         onClick={() => setShowPass(!showPass)}
                         size="small"
@@ -127,7 +129,6 @@ const ResetPassword = () => {
                         )}
                       </IconButton>
                     }
-                    iconPosition="end"
                     {...register('password', {
                       required: 'Password is required',
                       minLength: { value: 8, message: 'Minimum 8 characters' },
@@ -145,7 +146,8 @@ const ResetPassword = () => {
                     label="Confirm Password"
                     type={showConfirm ? 'text' : 'password'}
                     placeholder="Confirm new password"
-                    icon={
+                    leftIcon={<LockIcon fontSize="small" />}
+                    rightIcon={
                       <IconButton
                         onClick={() => setShowConfirm(!showConfirm)}
                         size="small"
@@ -157,7 +159,6 @@ const ResetPassword = () => {
                         )}
                       </IconButton>
                     }
-                    iconPosition="end"
                     {...register('password_confirmation', {
                       required: 'Please confirm password',
                       validate: (v) =>

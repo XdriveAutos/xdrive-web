@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
@@ -118,8 +119,7 @@ const Home = () => {
                     label="Email Address"
                     type="email"
                     placeholder="admin@example.com"
-                    icon={<EmailIcon fontSize="small" />}
-                    iconPosition="start"
+                    leftIcon={<EmailIcon fontSize="small" />}
                     errorMessage={getErrorMessage('email')}
                     {...register('email', {
                       required: 'Email is required',
@@ -137,7 +137,8 @@ const Home = () => {
                     label="Password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
-                    icon={
+                    leftIcon={<LockIcon fontSize="small" />}
+                    rightIcon={
                       <IconButton
                         size="small"
                         onClick={() => setShowPassword(!showPassword)}
@@ -151,7 +152,6 @@ const Home = () => {
                         )}
                       </IconButton>
                     }
-                    iconPosition="end"
                     errorMessage={getErrorMessage('password')}
                     {...register('password', {
                       required: 'Password is required',

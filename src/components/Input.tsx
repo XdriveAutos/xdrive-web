@@ -1,17 +1,12 @@
 import React from 'react';
-import { TextField, InputAdornment } from '@mui/material';
 
-interface InputProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'size'
-> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: boolean;
   errorMessage?: string;
-  icon?: React.ReactNode;
-  iconPosition?: 'start' | 'end';
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   helperText?: string;
-  muiSize?: 'small' | 'medium';
   fullWidth?: boolean;
 }
 
@@ -21,67 +16,85 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       label,
       error = false,
       errorMessage,
-      icon,
-      iconPosition = 'start',
+      leftIcon,
+      rightIcon,
       helperText,
-      muiSize = 'medium',
       fullWidth = true,
+      className = '',
       type = 'text',
-      className,
+      disabled,
       ...props
     },
     ref,
   ) => {
-    const startAdornment =
-      icon && iconPosition === 'start' ? (
-        <InputAdornment position="start" className="text-gray-500">
-          {icon}
-        </InputAdornment>
-      ) : null;
-
-    const endAdornment =
-      icon && iconPosition === 'end' ? (
-        <InputAdornment position="end" className="text-gray-500">
-          {icon}
-        </InputAdornment>
-      ) : null;
+    const hasLeftIcon = !!leftIcon;
+    const hasRightIcon = !!rightIcon;
 
     return (
-      <div className="w-full">
-        <TextField
-          inputRef={ref}
-          label={label}
-          type={type}
-          error={error || !!errorMessage}
-          fullWidth={fullWidth}
-          size={muiSize}
-          InputProps={{
-            startAdornment,
-            endAdornment,
-          }}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '0.5rem',
-              fontSize: '1rem',
-              '&:hover fieldset': {
-                borderColor: '#3b82f6',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#3b82f6',
-                borderWidth: '2px',
-              },
-            },
-            '& .MuiOutlinedInput-input': {
-              padding: muiSize === 'small' ? '8px 14px' : '10px 14px',
-            },
-            '& .MuiInputBase-input::placeholder': {
-              opacity: 0.7,
-            },
-          }}
-          helperText={errorMessage || helperText}
-          className={className}
-          {...(props as any)}
-        />
+      <div className={`space-y-1.5 ${fullWidth ? 'w-full' : ''}`}>
+        {/* Label */}
+        {label && (
+          <label className="block text-sm font-medium text-(--color-text)">
+            {label}
+          </label>
+        )}
+
+        {/* Input Container */}
+        <div className="relative">
+          {/* Left Icon */}
+          {hasLeftIcon && (
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+              <span
+                className={`text-(--color-body) ${disabled ? 'opacity-50' : ''}`}
+              >
+                {leftIcon}
+              </span>
+            </div>
+          )}
+
+          {/* Native Input */}
+          <input
+            ref={ref}
+            type={type}
+            disabled={disabled}
+            className={`
+              block w-full rounded-xl border bg-(--color-surface)
+              px-4 py-3.5 text-(--color-text) placeholder:text-(--color-inactive)
+              transition-all duration-200 outline-none
+              focus:ring-4 focus:ring-(--color-primary)/20
+              disabled:bg-(--color-elevation-1) disabled:cursor-not-allowed
+              ${hasLeftIcon ? 'pl-12' : 'pl-4'}
+              ${hasRightIcon ? 'pr-12' : 'pr-4'}
+              ${
+                error
+                  ? 'border-(--color-error) focus:border-(--color-error)'
+                  : 'border-(--color-border) focus:border-(--color-primary)'
+              }
+              ${className}
+            `}
+            {...props}
+          />
+
+          {/* Right Icon */}
+          {hasRightIcon && (
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+              <span
+                className={`text-(--color-body) ${disabled ? 'opacity-50' : ''}`}
+              >
+                {rightIcon}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Helper / Error Text */}
+        {(helperText || errorMessage) && (
+          <p
+            className={`text-sm ${error ? 'text-(--color-error)' : 'text-(--color-body)'}`}
+          >
+            {errorMessage || helperText}
+          </p>
+        )}
       </div>
     );
   },
