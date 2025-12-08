@@ -1,17 +1,14 @@
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
+import PageHeader from '@/components/PageHeader';
 
 const Mechanics = () => {
   return (
     <div>
-      <div className="mb-12 pt-8">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-(--color-text) flex items-center gap-4 mb-3">
-          <WrenchScrewdriverIcon className="h-12 w-12 text-(--color-primary)" />
-          Mechanics Management
-        </h1>
-        <p className="text-lg text-(--color-body)">
-          Manage mechanics and their profiles.
-        </p>
-      </div>
+      <PageHeader
+        title="Mechanics Management"
+        description="Manage mechanics and their profiles."
+        icon={<WrenchScrewdriverIcon className="h-12 w-12" />}
+      />
 
       <div className="bg-(--color-surface) border border-dashed border-(--color-primary)/30 rounded-3xl p-16 text-center shadow-inner">
         <h2 className="text-2xl font-bold text-(--color-text) mb-4">
