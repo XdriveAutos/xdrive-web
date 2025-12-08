@@ -68,11 +68,14 @@ export const useCarModel = () => {
     createCarModel: createCarModelMutation.mutateAsync,
     createCarModelStatus: createCarModelMutation.status,
     createCarModelError: createCarModelMutation.error,
+    createCarModelPending: createCarModelMutation.isPending,
     updateCarModel: updateCarModelMutation.mutateAsync,
     updateCarModelStatus: updateCarModelMutation.status,
     updateCarModelError: updateCarModelMutation.error,
+    updateCarModelPending: updateCarModelMutation.isPending,
     deleteCarModel: deleteCarModelMutation.mutateAsync,
     deleteCarModelStatus: deleteCarModelMutation.status,
     deleteCarModelError: deleteCarModelMutation.error,
+    deleteCarModelPending: deleteCarModelMutation.isPending,
   };
 };

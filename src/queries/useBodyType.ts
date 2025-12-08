@@ -66,11 +66,14 @@ export const useBodyType = () => {
     createBodyType: createBodyTypeMutation.mutateAsync,
     createBodyTypeStatus: createBodyTypeMutation.status,
     createBodyTypeError: createBodyTypeMutation.error,
+    createBodyTypePending: createBodyTypeMutation.isPending,
     updateBodyType: updateBodyTypeMutation.mutateAsync,
     updateBodyTypeStatus: updateBodyTypeMutation.status,
     updateBodyTypeError: updateBodyTypeMutation.error,
+    updateBodyTypePending: updateBodyTypeMutation.isPending,
     deleteBodyType: deleteBodyTypeMutation.mutateAsync,
     deleteBodyTypeStatus: deleteBodyTypeMutation.status,
     deleteBodyTypeError: deleteBodyTypeMutation.error,
+    deleteBodyTypePending: deleteBodyTypeMutation.isPending,
   };
 };

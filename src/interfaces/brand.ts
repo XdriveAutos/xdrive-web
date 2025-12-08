@@ -1,46 +1,6 @@
 import type { BaseResponse, PaginatedData } from './base';
 import { CarModel } from './car-model';
-
-export interface Car {
-  id: string;
-  title: string;
-  qr_code_url: string | null;
-  slug: string | null;
-  description: string;
-  year_of_manufacture: number;
-  trim: string;
-  color: string;
-  condition: string;
-  second_condition: string;
-  transmission: string;
-  mileage: number;
-  fuel_type: string;
-  gear_type: string;
-  engine_size: string;
-  horse_power: string;
-  number_of_seats: number;
-  key_features: string;
-  registered_car: string;
-  my_chasis_number: string;
-  price: string;
-  price_negotiable: string;
-  listing_type: string;
-  swap_method: string;
-  swap_with: string | null;
-  status: string;
-  rejection_reason: string | null;
-  is_featured: boolean;
-  flagged: number;
-  views_count: number;
-  sold_at: string | null;
-  featured_until: string | null;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Car } from './cars';
 
 export interface Brand {
   id: string;

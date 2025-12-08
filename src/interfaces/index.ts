@@ -5,3 +5,8 @@ export * from './plan';
 export * from './brand';
 export * from './car-model';
 export * from './body-type';
+export * from './cars';
+export * from './mechanic';
+export * from './workshop';
+export * from './service';
+export * from './comment';

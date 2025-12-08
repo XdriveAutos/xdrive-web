@@ -3,3 +3,8 @@ export * from './plan.service';
 export * from './brand.service';
 export * from './car-model.service';
 export * from './body-type.service';
+export * from './cars.service';
+export * from './mechanic.service';
+export * from './workshop.service';
+export * from './service.service';
+export * from './comment.service';
