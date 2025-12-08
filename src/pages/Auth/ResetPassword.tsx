@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -9,41 +9,61 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { useAuth } from '@/queries/useAuth';
-import type { ResetPasswordRequest } from '@/interfaces';
 import xdriveLogo from '@/assets/xdrive.png';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { resetPassword, resetPasswordStatus, resetPasswordError } = useAuth();
+
+  const state = location.state as { email: string; code: string } | null;
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ResetPasswordRequest>();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  } = useForm({
+    defaultValues: {
+      email: state?.email || '',
+      code: state?.code || '',
+      password: '',
+      password_confirmation: '',
+    },
+  });
+
   const password = watch('password');
 
-  const onSubmit = async (data: ResetPasswordRequest) => {
+  useEffect(() => {
+    if (!state?.email || !state?.code) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [state, navigate]);
+
+  const onSubmit = async (data: any) => {
     try {
-      await resetPassword(data);
-      navigate('/');
+      await resetPassword({
+        email: state!.email,
+        code: state!.code,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+      });
+      navigate('/', { replace: true });
     } catch (err) {
-      console.error('Password reset failed:', err);
+      console.error(err);
     }
   };
 
-  const isPasswordStrong =
-    password && password.length >= 8 && /[A-Z]/.test(password);
+  const hasUpper = /[A-Z]/.test(password);
+  const hasMinLength = password.length >= 8;
 
   return (
     <div className="min-h-screen bg-linear-to-r from-blue-600 to-blue-800 flex items-center">
       <div className="w-full">
-        <div className="grid grid-cols-2 gap-0 min-h-screen">
-          {/* Left Column - Branding */}
-          <div className="bg-linear-to-br from-blue-600 to-blue-800 flex flex-col justify-center items-center p-12 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+          <div className="hidden lg:flex bg-linear-to-r from-blue-600 to-blue-800 flex-col justify-center items-center p-12 text-white">
             <div className="w-32 h-32 mb-8">
               <img
                 src={xdriveLogo}
@@ -58,67 +78,49 @@ const ResetPassword = () => {
               Xdrive Automobile Limited
             </p>
             <p className="text-lg text-blue-100 text-center max-w-md">
-              Secure password reset process
+              Create a strong new password
             </p>
           </div>
 
-          {/* Right Column - Form */}
-          <div className="bg-white flex flex-col justify-center items-center p-12">
+          <div className="bg-white flex flex-col justify-center items-center p-6 sm:p-8 md:p-12">
             <div className="w-full max-w-md">
-              {/* Back Button */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-20 h-20">
+                  <img
+                    src={xdriveLogo}
+                    alt="Xdrive"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+
               <button
-                onClick={() => navigate('/verify-forgot-password')}
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors font-medium"
+                onClick={() => navigate(-1)}
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 font-medium"
               >
                 <ArrowBackIcon fontSize="small" />
-                <span className="text-sm">Back</span>
+                Back
               </button>
 
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Reset Password
+                Set new password
               </h2>
-              <p className="text-gray-600 mb-8">
-                Create a new strong password for your account
+              <p className="text-base text-gray-600 mb-8">
+                Your new password must be different from previous ones
               </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Email (read-only) */}
-                <div>
-                  <Input
-                    label="Email Address"
-                    type="email"
-                    disabled
-                    defaultValue={(location.state?.email as string) || ''}
-                  />
-                </div>
-
-                {/* Code Input */}
-                <div>
-                  <Input
-                    label="Reset Code"
-                    type="text"
-                    placeholder="Enter the code from your email"
-                    {...register('code', {
-                      required: 'Reset code is required',
-                    })}
-                    errorMessage={errors.code?.message as string | undefined}
-                  />
-                </div>
-
-                {/* New Password Input */}
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                   <Input
                     label="New Password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a strong password"
+                    type={showPass ? 'text' : 'password'}
+                    placeholder="Enter new password"
                     icon={
                       <IconButton
+                        onClick={() => setShowPass(!showPass)}
                         size="small"
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        sx={{ mr: -1 }}
                       >
-                        {showPassword ? (
+                        {showPass ? (
                           <VisibilityOffIcon fontSize="small" />
                         ) : (
                           <VisibilityIcon fontSize="small" />
@@ -126,63 +128,29 @@ const ResetPassword = () => {
                       </IconButton>
                     }
                     iconPosition="end"
-                    errorMessage={
-                      errors.password?.message as string | undefined
-                    }
                     {...register('password', {
                       required: 'Password is required',
-                      minLength: {
-                        value: 8,
-                        message: 'Password must be at least 8 characters',
-                      },
+                      minLength: { value: 8, message: 'Minimum 8 characters' },
                       pattern: {
-                        value: /^(?=.*[A-Z])/,
-                        message:
-                          'Password must contain at least one uppercase letter',
+                        value: /[A-Z]/,
+                        message: 'At least one uppercase letter',
                       },
                     })}
+                    errorMessage={errors.password?.message}
                   />
-                  {/* Password Strength Indicator */}
-                  {password && (
-                    <div className="mt-2 flex items-center gap-2">
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full transition-all ${
-                            isPasswordStrong
-                              ? 'bg-green-500 w-full'
-                              : 'bg-yellow-500 w-2/3'
-                          }`}
-                        />
-                      </div>
-                      <span
-                        className={`text-xs font-medium ${
-                          isPasswordStrong
-                            ? 'text-green-600'
-                            : 'text-yellow-600'
-                        }`}
-                      >
-                        {isPasswordStrong ? 'Strong' : 'Good'}
-                      </span>
-                    </div>
-                  )}
                 </div>
 
-                {/* Confirm Password Input */}
                 <div>
                   <Input
                     label="Confirm Password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Re-enter your password"
+                    type={showConfirm ? 'text' : 'password'}
+                    placeholder="Confirm new password"
                     icon={
                       <IconButton
+                        onClick={() => setShowConfirm(!showConfirm)}
                         size="small"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        edge="end"
-                        sx={{ mr: -1 }}
                       >
-                        {showConfirmPassword ? (
+                        {showConfirm ? (
                           <VisibilityOffIcon fontSize="small" />
                         ) : (
                           <VisibilityIcon fontSize="small" />
@@ -190,20 +158,44 @@ const ResetPassword = () => {
                       </IconButton>
                     }
                     iconPosition="end"
-                    errorMessage={
-                      errors.password_confirmation?.message as
-                        | string
-                        | undefined
-                    }
                     {...register('password_confirmation', {
-                      required: 'Please confirm your password',
-                      validate: (value) =>
-                        value === password || 'Passwords do not match',
+                      required: 'Please confirm password',
+                      validate: (v) =>
+                        v === password || 'Passwords do not match',
                     })}
+                    errorMessage={errors.password_confirmation?.message}
                   />
                 </div>
 
-                {/* Submit Button */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircleIcon
+                      fontSize="small"
+                      className={
+                        hasMinLength ? 'text-green-500' : 'text-gray-400'
+                      }
+                    />
+                    <span
+                      className={
+                        hasMinLength ? 'text-green-700' : 'text-gray-500'
+                      }
+                    >
+                      At least 8 characters
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircleIcon
+                      fontSize="small"
+                      className={hasUpper ? 'text-green-500' : 'text-gray-400'}
+                    />
+                    <span
+                      className={hasUpper ? 'text-green-700' : 'text-gray-500'}
+                    >
+                      One uppercase letter
+                    </span>
+                  </div>
+                </div>
+
                 <Button
                   fullWidth
                   loading={resetPasswordStatus === 'pending'}
@@ -214,60 +206,11 @@ const ResetPassword = () => {
                 </Button>
               </form>
 
-              {/* Error Alert */}
               {resetPasswordError && (
                 <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
-                  {resetPasswordError.message ||
-                    'Failed to reset password. Please try again.'}
+                  {resetPasswordError.message || 'Failed to reset password'}
                 </div>
               )}
-
-              {/* Password Requirements */}
-              <div className="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-3">
-                <p className="text-sm font-medium text-gray-900">
-                  Password requirements:
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2 text-gray-700">
-                    <CheckCircleIcon
-                      fontSize="small"
-                      className={
-                        password && password.length >= 8
-                          ? 'text-green-500'
-                          : 'text-gray-400'
-                      }
-                    />
-                    At least 8 characters
-                  </li>
-                  <li className="flex items-center gap-2 text-gray-700">
-                    <CheckCircleIcon
-                      fontSize="small"
-                      className={
-                        password && /[A-Z]/.test(password)
-                          ? 'text-green-500'
-                          : 'text-gray-400'
-                      }
-                    />
-                    One uppercase letter
-                  </li>
-                  <li className="flex items-center gap-2 text-gray-700">
-                    <CheckCircleIcon
-                      fontSize="small"
-                      className={
-                        password && password === watch('password_confirmation')
-                          ? 'text-green-500'
-                          : 'text-gray-400'
-                      }
-                    />
-                    Passwords match
-                  </li>
-                </ul>
-              </div>
-
-              {/* Footer */}
-              <div className="mt-8 pt-8 border-t border-gray-200 text-center text-xs text-gray-500">
-                <p>© 2025 Xdrive Automobile Limited. All rights reserved.</p>
-              </div>
             </div>
           </div>
         </div>

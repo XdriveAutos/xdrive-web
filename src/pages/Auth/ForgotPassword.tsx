@@ -21,7 +21,7 @@ const ForgotPassword = () => {
   const onSubmit = async (data: ForgotPasswordRequest) => {
     try {
       await forgotPassword(data);
-      navigate('/verify-forgot-password');
+      navigate('/verify-forgot-password', { state: { email: data.email } });
     } catch (err) {
       console.error('Forgot password request failed:', err);
     }
@@ -30,9 +30,8 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen bg-linear-to-r from-blue-600 to-blue-800 flex items-center">
       <div className="w-full">
-        <div className="grid grid-cols-2 gap-0 min-h-screen">
-          {/* Left Column - Branding */}
-          <div className="bg-linear-to-br from-blue-600 to-blue-800 flex flex-col justify-center items-center p-12 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+          <div className="hidden lg:flex bg-linear-to-r from-blue-600 to-blue-800 flex-col justify-center items-center p-12 text-white">
             <div className="w-32 h-32 mb-8">
               <img
                 src={xdriveLogo}
@@ -51,28 +50,38 @@ const ForgotPassword = () => {
             </p>
           </div>
 
-          {/* Right Column - Form */}
-          <div className="bg-white flex flex-col justify-center items-center p-12">
+          <div className="bg-white flex flex-col justify-center items-center p-6 sm:p-8 md:p-12">
             <div className="w-full max-w-md">
-              {/* Back Button */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-20 h-20">
+                  <img
+                    src={xdriveLogo}
+                    alt="Xdrive"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+
               <button
                 onClick={() => navigate('/')}
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors font-medium"
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 sm:mb-8 transition-colors font-medium"
               >
                 <ArrowBackIcon fontSize="small" />
-                <span className="text-sm">Back to Login</span>
+                <span className="text-xs sm:text-sm">Back to Login</span>
               </button>
 
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 Forgot Password?
               </h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                 Enter your email address and we'll send you a code to reset your
                 password
               </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Email Input */}
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-4 sm:space-y-5"
+              >
                 <div>
                   <Input
                     label="Email Address"
@@ -80,7 +89,7 @@ const ForgotPassword = () => {
                     placeholder="admin@example.com"
                     icon={<EmailIcon fontSize="small" />}
                     iconPosition="start"
-                    errorMessage={errors.email?.message as string | undefined}
+                    errorMessage={errors.email?.message}
                     {...register('email', {
                       required: 'Email is required',
                       pattern: {
@@ -91,7 +100,6 @@ const ForgotPassword = () => {
                   />
                 </div>
 
-                {/* Submit Button */}
                 <Button
                   fullWidth
                   loading={forgotPasswordStatus === 'pending'}
@@ -102,24 +110,21 @@ const ForgotPassword = () => {
                 </Button>
               </form>
 
-              {/* Error Alert */}
               {forgotPasswordError && (
-                <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+                <div className="mt-4 sm:mt-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-red-700">
                   {forgotPasswordError.message ||
                     'Failed to send reset code. Please try again.'}
                 </div>
               )}
 
-              {/* Info Box */}
-              <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-900">
+              <div className="mt-4 sm:mt-6 bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-blue-900">
                   <strong>Tip:</strong> Check your email for the password reset
                   code. It may take a few minutes to arrive.
                 </p>
               </div>
 
-              {/* Footer */}
-              <div className="mt-8 pt-8 border-t border-gray-200 text-center text-xs text-gray-500">
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 text-center text-xs text-gray-500">
                 <p>© 2025 Xdrive Automobile Limited. All rights reserved.</p>
               </div>
             </div>

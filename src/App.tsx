@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Admin/Dashboard';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import VerifyForgotPassword from './pages/Auth/VerifyForgotPassword';
 import Users from './pages/Management/Users';
 import Mechanics from './pages/Management/Mechanics';
 import Workshops from './pages/Management/Workshops';
+import NotFound from './pages/NotFound';
 import { ProtectedRoute, AdminLayout, ScrollToTop } from './components';
 
 const AppRoutes = () => {
@@ -65,6 +66,9 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* 404 - Catch all unmatched routes */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

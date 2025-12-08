@@ -37,9 +37,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-linear-to-r from-blue-600 to-blue-800 flex items-center">
       <div className="w-full">
-        <div className="grid grid-cols-2 gap-0 min-h-screen">
-          {/* Left Column - Branding */}
-          <div className="bg-linear-to-br from-blue-600 to-blue-800 flex flex-col justify-center items-center p-12 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+          {/* Left Column - Branding - Hidden on mobile */}
+          <div className="hidden lg:flex bg-linear-to-r from-blue-600 to-blue-800 flex-col justify-center items-center p-12 text-white">
             <div className="w-32 h-32 mb-8">
               <img
                 src={xdriveLogo}
@@ -88,16 +88,30 @@ const Home = () => {
           </div>
 
           {/* Right Column - Login Form */}
-          <div className="bg-white flex flex-col justify-center items-center p-12">
+          <div className="bg-white flex flex-col justify-center items-center p-6 sm:p-8 md:p-12">
             <div className="w-full max-w-md">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {/* Logo - Mobile only */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-20 h-20">
+                  <img
+                    src={xdriveLogo}
+                    alt="Xdrive"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 Admin Dashboard
               </h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                 Sign in to your administrative account
               </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-4 sm:space-y-5"
+              >
                 {/* Email Input */}
                 <div>
                   <Input
@@ -154,7 +168,7 @@ const Home = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/forgot-password')}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                    className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                   >
                     Forgot Password?
                   </button>
@@ -166,7 +180,7 @@ const Home = () => {
                     type="checkbox"
                     className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-xs sm:text-sm text-gray-700">
                     Keep me signed in
                   </span>
                 </label>
@@ -184,13 +198,13 @@ const Home = () => {
 
               {/* Error Alert */}
               {loginError && (
-                <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+                <div className="mt-4 sm:mt-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-red-700">
                   {loginError.message || 'Login failed. Please try again.'}
                 </div>
               )}
 
               {/* Footer */}
-              <div className="mt-8 pt-8 border-t border-gray-200 text-center text-xs text-gray-500">
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 text-center text-xs text-gray-500">
                 <p>© 2025 Xdrive Automobile Limited. All rights reserved.</p>
               </div>
             </div>
