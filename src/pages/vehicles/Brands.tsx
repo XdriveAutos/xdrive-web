@@ -7,6 +7,8 @@ import {
   PencilIcon,
   TrashIcon,
   EyeIcon,
+  CheckCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useBrand } from '@/queries/useBrand';
 import { Button, Loading, Pagination } from '@/components';
@@ -148,77 +150,125 @@ const Brands = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {brandsList.map((brand) => (
               <div
                 key={brand.id}
                 className={`
-                    relative bg-(--color-surface) rounded-2xl border transition-all duration-200 group
-                    ${
-                      brand.is_active
-                        ? 'border-(--color-border) shadow-sm hover:shadow-md'
-                        : 'border-(--color-border) opacity-75 bg-(--color-background)/50'
-                    }
-                    `}
+                  relative bg-(--color-surface) rounded-2xl border transition-all duration-200 flex flex-col
+                  ${
+                    brand.is_active
+                      ? 'border-(--color-border) shadow-sm hover:shadow-md'
+                      : 'border-(--color-border) opacity-75 bg-(--color-background)/50'
+                  }
+                `}
               >
-                {/* Status Indicator */}
-                <div
-                  className={`absolute top-3 right-3 h-2.5 w-2.5 rounded-full ${brand.is_active ? 'bg-emerald-500' : 'bg-gray-300'}`}
-                  title={brand.is_active ? 'Active' : 'Inactive'}
-                />
-
-                <div className="p-6 flex flex-col items-center text-center">
-                  <div className="h-20 w-20 mb-4 flex items-center justify-center p-2 rounded-xl bg-white shadow-sm border border-gray-100">
-                    {brand.logo ? (
-                      <img
-                        src={brand.logo}
-                        alt={brand.name}
-                        className="max-h-full max-w-full object-contain"
-                      />
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4">
+                  <span
+                    className={`
+                      px-2.5 py-1 rounded-full text-xs font-medium border flex items-center gap-1
+                      ${
+                        brand.is_active
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-gray-50 text-gray-600 border-gray-200'
+                      }
+                    `}
+                  >
+                    {brand.is_active ? (
+                      <>
+                        <CheckCircleIcon className="h-3 w-3" />
+                        Active
+                      </>
                     ) : (
-                      <BuildingStorefrontIcon className="h-10 w-10 text-gray-300" />
+                      <>
+                        <XCircleIcon className="h-3 w-3" />
+                        Inactive
+                      </>
                     )}
+                  </span>
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col items-center text-center mt-4">
+                  {/* Logo/Icon */}
+                  <div className="mb-4">
+                    <div className="h-20 w-20 rounded-xl border border-gray-100 shadow-sm bg-white p-2 flex items-center justify-center">
+                      {brand.logo ? (
+                        <img
+                          src={brand.logo}
+                          alt={brand.name}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      ) : (
+                        <BuildingStorefrontIcon className="h-10 w-10 text-gray-300" />
+                      )}
+                    </div>
                   </div>
 
-                  <h3 className="font-bold text-(--color-text) mb-1 truncate w-full">
+                  {/* Name */}
+                  <h3 className="font-bold text-lg text-(--color-text) mb-1 truncate w-full">
                     {brand.name}
                   </h3>
 
+                  {/* Count */}
                   <p className="text-xs text-(--color-body)">
                     {brand.car_models_count || 0} Models
                   </p>
                 </div>
 
-                <div className="border-t border-(--color-border) p-3 flex justify-between items-center bg-(--color-background)/30 rounded-b-2xl">
-                  <button
-                    onClick={() => handleToggleActive(brand)}
-                    className={`text-xs font-medium px-2 py-1 rounded transition-colors ${brand.is_active ? 'text-gray-500 hover:text-gray-700' : 'text-emerald-600 hover:text-emerald-700 bg-emerald-50'}`}
-                  >
-                    {brand.is_active ? 'Deactivate' : 'Activate'}
-                  </button>
-
-                  <div className="flex gap-1">
-                    <button
+                {/* Actions */}
+                <div className="p-4 border-t border-(--color-border) space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="justify-center"
                       onClick={() => setViewingBrandId(brand.id)}
-                      className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
-                      title="View Models"
+                      icon={<EyeIcon className="h-4 w-4" />}
                     >
-                      <EyeIcon className="h-4 w-4" />
-                    </button>
-                    <button
+                      Models
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="justify-center"
                       onClick={() => handleEdit(brand)}
-                      className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
-                      title="Edit"
+                      icon={<PencilIcon className="h-4 w-4" />}
                     >
-                      <PencilIcon className="h-4 w-4" />
-                    </button>
-                    <button
+                      Edit
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`justify-center ${
+                        brand.is_active
+                          ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
+                          : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
+                      }`}
+                      onClick={() => handleToggleActive(brand)}
+                      icon={
+                        brand.is_active ? (
+                          <XCircleIcon className="h-4 w-4" />
+                        ) : (
+                          <CheckCircleIcon className="h-4 w-4" />
+                        )
+                      }
+                    >
+                      {brand.is_active ? 'Disable' : 'Enable'}
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="justify-center text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
                       onClick={() => confirmDelete(brand.id)}
-                      className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-error) transition-colors"
-                      title="Delete"
+                      icon={<TrashIcon className="h-4 w-4" />}
                     >
-                      <TrashIcon className="h-4 w-4" />
-                    </button>
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </div>

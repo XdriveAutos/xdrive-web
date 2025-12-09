@@ -5,6 +5,8 @@ import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
+  CheckCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useBodyType } from '@/queries/useBodyType';
 import { Button, Loading } from '@/components';
@@ -127,12 +129,12 @@ const BodyTypes = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {bodyTypesList.map((bodyType) => (
             <div
               key={bodyType.id}
               className={`
-                relative bg-(--color-surface) rounded-2xl border transition-all duration-200 group
+                relative bg-(--color-surface) rounded-2xl border transition-all duration-200 flex flex-col
                 ${
                   bodyType.is_active
                     ? 'border-(--color-border) shadow-sm hover:shadow-md'
@@ -140,48 +142,90 @@ const BodyTypes = () => {
                 }
                 `}
             >
-              {/* Status Indicator */}
-              <div
-                className={`absolute top-3 right-3 h-2.5 w-2.5 rounded-full ${bodyType.is_active ? 'bg-emerald-500' : 'bg-gray-300'}`}
-                title={bodyType.is_active ? 'Active' : 'Inactive'}
-              />
+              {/* Status Badge */}
+              <div className="absolute top-4 right-4">
+                <span
+                  className={`
+                    px-2.5 py-1 rounded-full text-xs font-medium border flex items-center gap-1
+                    ${
+                      bodyType.is_active
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-gray-50 text-gray-600 border-gray-200'
+                    }
+                  `}
+                >
+                  {bodyType.is_active ? (
+                    <>
+                      <CheckCircleIcon className="h-3 w-3" />
+                      Active
+                    </>
+                  ) : (
+                    <>
+                      <XCircleIcon className="h-3 w-3" />
+                      Inactive
+                    </>
+                  )}
+                </span>
+              </div>
 
-              <div className="p-6 flex flex-col items-center text-center">
-                <div className="h-16 w-16 mb-4 flex items-center justify-center p-2 rounded-full bg-blue-50 text-blue-600">
-                  <span className="text-2xl font-bold">
-                    {bodyType.name.charAt(0)}
-                  </span>
+              <div className="p-6 flex-1 flex flex-col items-center text-center mt-4">
+                {/* Icon/Initial */}
+                <div className="mb-4">
+                  <div className="h-20 w-20 rounded-full border-4 border-white dark:border-gray-800 shadow-sm bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <span className="text-3xl font-bold">
+                      {bodyType.name.charAt(0)}
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="font-bold text-(--color-text) mb-1 truncate w-full">
+                {/* Name */}
+                <h3 className="font-bold text-lg text-(--color-text) mb-1 truncate w-full">
                   {bodyType.name}
                 </h3>
               </div>
 
-              <div className="border-t border-(--color-border) p-3 flex justify-between items-center bg-(--color-background)/30 rounded-b-2xl">
-                <button
-                  onClick={() => handleToggleActive(bodyType)}
-                  className={`text-xs font-medium px-2 py-1 rounded transition-colors ${bodyType.is_active ? 'text-gray-500 hover:text-gray-700' : 'text-emerald-600 hover:text-emerald-700 bg-emerald-50'}`}
-                >
-                  {bodyType.is_active ? 'Deactivate' : 'Activate'}
-                </button>
-
-                <div className="flex gap-1">
-                  <button
+              {/* Actions */}
+              <div className="p-4 border-t border-(--color-border) space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-center"
                     onClick={() => handleEdit(bodyType)}
-                    className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
-                    title="Edit"
+                    icon={<PencilIcon className="h-4 w-4" />}
                   >
-                    <PencilIcon className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => confirmDelete(bodyType.id)}
-                    className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-error) transition-colors"
-                    title="Delete"
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`justify-center ${
+                      bodyType.is_active
+                        ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
+                        : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
+                    }`}
+                    onClick={() => handleToggleActive(bodyType)}
+                    icon={
+                      bodyType.is_active ? (
+                        <XCircleIcon className="h-4 w-4" />
+                      ) : (
+                        <CheckCircleIcon className="h-4 w-4" />
+                      )
+                    }
                   >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
+                    {bodyType.is_active ? 'Disable' : 'Enable'}
+                  </Button>
                 </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-center text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
+                  onClick={() => confirmDelete(bodyType.id)}
+                  icon={<TrashIcon className="h-4 w-4" />}
+                >
+                  Delete Body Type
+                </Button>
               </div>
             </div>
           ))}

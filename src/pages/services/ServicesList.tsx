@@ -5,6 +5,8 @@ import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
+  CheckCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useServices } from '@/queries/useServices';
 import { Button, Loading } from '@/components';
@@ -145,71 +147,106 @@ const ServicesList = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {servicesList.map((service) => (
             <div
               key={service.id}
               className={`
-                bg-(--color-surface) rounded-2xl border border-(--color-border) shadow-sm hover:shadow-md transition-all duration-200 flex flex-col
-                ${!service.is_active && 'opacity-75 bg-(--color-background)/50'}
+                relative bg-(--color-surface) rounded-2xl border transition-all duration-200 flex flex-col
+                ${
+                  service.is_active
+                    ? 'border-(--color-border) shadow-sm hover:shadow-md'
+                    : 'border-(--color-border) opacity-75 bg-(--color-background)/50'
+                }
               `}
             >
-              <div className="p-5 border-b border-(--color-border) flex justify-between items-start">
-                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-orange-100 to-amber-100 text-orange-600 flex items-center justify-center shadow-inner">
-                  <WrenchScrewdriverIcon className="h-6 w-6" />
-                </div>
+              {/* Status Badge */}
+              <div className="absolute top-4 right-4">
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                      ${
-                        service.is_active
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                          : 'bg-gray-50 text-gray-600 border-gray-100'
-                      }
-                    `}
+                  className={`
+                    px-2.5 py-1 rounded-full text-xs font-medium border flex items-center gap-1
+                    ${
+                      service.is_active
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-gray-50 text-gray-600 border-gray-200'
+                    }
+                  `}
                 >
-                  {service.is_active ? 'Active' : 'Inactive'}
+                  {service.is_active ? (
+                    <>
+                      <CheckCircleIcon className="h-3 w-3" />
+                      Active
+                    </>
+                  ) : (
+                    <>
+                      <XCircleIcon className="h-3 w-3" />
+                      Inactive
+                    </>
+                  )}
                 </span>
               </div>
 
-              <div className="p-5 flex-1">
+              <div className="p-6 flex-1 flex flex-col items-center text-center mt-4">
+                {/* Icon */}
+                <div className="mb-4">
+                  <div className="h-20 w-20 rounded-full border-4 border-white dark:border-gray-800 shadow-sm bg-linear-to-br from-orange-50 to-amber-50 text-orange-600 flex items-center justify-center">
+                    <WrenchScrewdriverIcon className="h-10 w-10" />
+                  </div>
+                </div>
+
+                {/* Name */}
                 <h3 className="font-bold text-lg text-(--color-text) mb-2">
                   {service.name}
                 </h3>
-                <p className="text-sm text-(--color-body) leading-relaxed line-clamp-3">
+
+                {/* Description */}
+                <p className="text-sm text-(--color-body) leading-relaxed line-clamp-3 mb-4">
                   {service.description}
                 </p>
               </div>
 
-              <div className="p-4 bg-(--color-background)/30 border-t border-(--color-border) rounded-b-2xl flex justify-between items-center">
-                <button
-                  onClick={() => handleToggleActive(service)}
-                  className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors border
-                     ${
-                       service.is_active
-                         ? 'text-gray-600 hover:text-gray-800 border-transparent hover:border-gray-200 hover:bg-white'
-                         : 'text-emerald-600 hover:text-emerald-700 bg-emerald-50 border-emerald-100 hover:bg-emerald-100'
-                     }`}
-                >
-                  {service.is_active ? 'Deactivate' : 'Activate'}
-                </button>
-
-                <div className="flex gap-2">
+              {/* Actions */}
+              <div className="p-4 border-t border-(--color-border) space-y-2">
+                <div className="grid grid-cols-2 gap-2">
                   <Button
-                    size="sm"
                     variant="outline"
+                    size="sm"
+                    className="justify-center"
                     onClick={() => handleEdit(service)}
                     icon={<PencilIcon className="h-4 w-4" />}
                   >
                     Edit
                   </Button>
-                  <button
-                    onClick={() => confirmDelete(service.id)}
-                    className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                    title="Delete"
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`justify-center ${
+                      service.is_active
+                        ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
+                        : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
+                    }`}
+                    onClick={() => handleToggleActive(service)}
+                    icon={
+                      service.is_active ? (
+                        <XCircleIcon className="h-4 w-4" />
+                      ) : (
+                        <CheckCircleIcon className="h-4 w-4" />
+                      )
+                    }
                   >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
+                    {service.is_active ? 'Disable' : 'Enable'}
+                  </Button>
                 </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-center text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
+                  onClick={() => confirmDelete(service.id)}
+                  icon={<TrashIcon className="h-4 w-4" />}
+                >
+                  Delete Service
+                </Button>
               </div>
             </div>
           ))}
