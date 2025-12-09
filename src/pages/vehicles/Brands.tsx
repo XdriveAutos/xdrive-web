@@ -181,7 +181,7 @@ const Brands = () => {
                   </h3>
 
                   <p className="text-xs text-(--color-body)">
-                    {brand.car_models?.length || 0} Models
+                    {brand.car_models_count || 0} Models
                   </p>
                 </div>
 

@@ -8,4 +8,6 @@ export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as PageHeader } from './PageHeader';
 export * from './Admin';
 export * from './Plan';
+export * from './Plan';
 export * from './Brand';
+export * from './BodyType';

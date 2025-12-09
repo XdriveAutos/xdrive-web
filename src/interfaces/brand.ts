@@ -8,6 +8,8 @@ export interface Brand {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  car_models_count: number;
+  cars_count: number;
   car_models?: CarModel[];
 }
 
