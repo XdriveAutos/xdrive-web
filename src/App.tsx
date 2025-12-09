@@ -11,6 +11,8 @@ import NotFound from './pages/NotFound';
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard';
 import Users from './pages/management/Users';
+import CreateUser from './pages/management/CreateUser';
+import EditUser from './pages/management/EditUser';
 import Mechanics from './pages/management/Mechanics';
 import Workshops from './pages/management/Workshops';
 import Cars from './pages/vehicles/Cars';
@@ -78,6 +80,8 @@ function App() {
 
           {/* Management */}
           <Route path="management/users" element={<Users />} />
+          <Route path="management/users/create" element={<CreateUser />} />
+          <Route path="management/users/:id/edit" element={<EditUser />} />
           <Route path="management/mechanics" element={<Mechanics />} />
           <Route path="management/workshops" element={<Workshops />} />
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageHeader from '@/components/PageHeader';
 import {
   UserGroupIcon,
@@ -15,21 +15,19 @@ import {
 import { useUsers } from '@/queries/useUsers';
 import { Button, Loading, Pagination } from '@/components';
 import {
-  UserModal,
   UserDeleteModal,
   UserSuspendModal,
   UserActivateModal,
 } from '@/components/User';
-import { User, CreateUserRequest, UpdateUserRequest } from '@/interfaces/users';
+import { User } from '@/interfaces/users';
 
 const Users = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1', 10);
 
   const {
     useGetUsers,
-    createUser,
-    updateUser,
     deleteUser,
     suspendUser,
     activateUser,
@@ -37,10 +35,6 @@ const Users = () => {
   } = useUsers();
 
   const { data: usersResponse, isLoading: usersLoading } = useGetUsers(page);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
@@ -65,16 +59,6 @@ const Users = () => {
     isOpen: false,
     user: null,
   });
-
-  const handleCreate = () => {
-    setEditingUser(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEdit = (user: User) => {
-    setEditingUser(user);
-    setIsModalOpen(true);
-  };
 
   const confirmDelete = (id: string) => {
     setDeleteConfirmation({ isOpen: true, userId: id });
@@ -129,37 +113,6 @@ const Users = () => {
     }
   };
 
-  const handleSubmit = async (data: CreateUserRequest) => {
-    setIsSubmitting(true);
-    try {
-      if (editingUser) {
-        // Prepare update data - allow partial updates
-        const updateData: UpdateUserRequest = {
-          first_name: data.first_name,
-          last_name: data.last_name,
-          email: data.email,
-          phone_number: data.phone_number,
-          role: data.role,
-          country: data.country,
-          state: data.state,
-          town_city: data.town_city,
-          address: data.address,
-        };
-        await updateUser({
-          id: editingUser.id,
-          data: updateData,
-        });
-      } else {
-        await createUser(data);
-      }
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handlePageChange = (newPage: number) => {
     setSearchParams({ page: newPage.toString() });
   };
@@ -180,7 +133,10 @@ const Users = () => {
           description="Manage all users in the system."
           icon={<UserGroupIcon className="h-12 w-12" />}
         />
-        <Button onClick={handleCreate} icon={<PlusIcon className="h-5 w-5" />}>
+        <Button
+          onClick={() => navigate('/management/users/create')}
+          icon={<PlusIcon className="h-5 w-5" />}
+        >
           Create User
         </Button>
       </div>
@@ -335,7 +291,9 @@ const Users = () => {
                         variant="outline"
                         size="sm"
                         className="justify-center"
-                        onClick={() => handleEdit(user)}
+                        onClick={() =>
+                          navigate(`/management/users/${user.id}/edit`)
+                        }
                         icon={<PencilIcon className="h-4 w-4" />}
                       >
                         Edit
@@ -364,14 +322,6 @@ const Users = () => {
           </>
         )}
       </div>
-
-      <UserModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
-        initialData={editingUser}
-        isLoading={isSubmitting}
-      />
 
       <UserDeleteModal
         isOpen={deleteConfirmation.isOpen}
