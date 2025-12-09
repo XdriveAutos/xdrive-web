@@ -57,6 +57,8 @@ import Privacy from './pages/landing/Privacy';
 
 // ... other imports
 
+import { Toaster } from 'sonner';
+
 function App() {
   const location = useLocation();
 
@@ -66,6 +68,7 @@ function App() {
 
   return (
     <>
+      <Toaster richColors position="top-right" />
       <ScrollToTop />
       <Routes>
         {/* Landing Routes */}

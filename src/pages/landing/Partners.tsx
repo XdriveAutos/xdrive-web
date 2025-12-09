@@ -1,26 +1,31 @@
+import PageHero from '@/components/Landing/PageHero';
+
 const Partners = () => {
   return (
-    <div className="pt-32 pb-20 container mx-auto px-4 min-h-[60vh]">
-      <h1 className="text-4xl font-bold text-(--color-primary) mb-8">
-        Our Partners
-      </h1>
-      <p className="text-gray-600 leading-relaxed max-w-3xl mb-8">
-        We collaborate with industry leaders to bring you the best automotive
-        services. Together, we drive innovation and excellence.
-      </p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-        {/* Placeholder for partners grid */}
-        <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-          Partner 1
-        </div>
-        <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-          Partner 2
-        </div>
-        <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-          Partner 3
-        </div>
-        <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-          Partner 4
+    <div className="min-h-[60vh]">
+      <PageHero
+        title="Our Partners"
+        subtitle="Collaborating with industry leaders to bring you the best."
+      />
+      <div className="container mx-auto px-4 py-16">
+        <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto text-center mb-12 text-lg">
+          We collaborate with industry leaders to bring you the best automotive
+          services. Together, we drive innovation and excellence.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {/* Placeholder for partners grid */}
+          <div className="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-medium border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            Partner 1
+          </div>
+          <div className="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-medium border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            Partner 2
+          </div>
+          <div className="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-medium border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            Partner 3
+          </div>
+          <div className="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-medium border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            Partner 4
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import Logo from '../../assets/xdrive.png';
+import { Link } from 'react-router-dom';
+import Logo from '@/assets/xdrive.png';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -64,6 +65,18 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
+            <Link
+              to="/"
+              className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+            >
+              About
+            </Link>
             <a
               href="#"
               className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
@@ -75,12 +88,6 @@ const Header = () => {
               className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
             >
               Features
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
-            >
-              About
             </a>
             <a
               href={storeUrl}
@@ -107,23 +114,33 @@ const Header = () => {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-[#0A2647] border-t border-white/10 shadow-xl py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
+            <Link
+              to="/"
+              className="text-gray-300 hover:text-white py-2 border-b border-white/5"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className="text-gray-300 hover:text-white py-2 border-b border-white/5"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About
+            </Link>
             <a
               href="#"
               className="text-gray-300 hover:text-white py-2 border-b border-white/5"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Services
             </a>
             <a
               href="#"
               className="text-gray-300 hover:text-white py-2 border-b border-white/5"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Features
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-white py-2 border-b border-white/5"
-            >
-              About
             </a>
             <a
               href={storeUrl}
