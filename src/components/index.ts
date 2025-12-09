@@ -11,3 +11,6 @@ export * from './Plan';
 export * from './Plan';
 export * from './Brand';
 export * from './BodyType';
+export * from './BodyType';
+export * from './Service';
+export * from './Subscription';
