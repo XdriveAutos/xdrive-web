@@ -196,14 +196,12 @@ const Footer = () => {
           </motion.div>
         </motion.div>
 
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+        <div className="border-t border-gray-800 pt-8 flex flex-col items-center gap-2 text-sm text-gray-500 text-center">
           <p>
             &copy; {new Date().getFullYear()} XDRIVE AUTOMOBILES LIMITED. All
             rights reserved.
           </p>
-          <div className="flex gap-6">
-            <span className="text-gray-500">RC 7538475</span>
-          </div>
+          <span className="text-gray-500">RC 7538475</span>
         </div>
       </div>
     </footer>
