@@ -24,6 +24,10 @@ import Settings from './pages/system/Settings';
 import Notifications from './pages/system/Notifications';
 import Maintenance from './pages/system/Maintenance';
 
+// Account
+import Profile from './pages/account/Profile';
+import ChangePassword from './pages/account/ChangePassword';
+
 // Components
 import { ProtectedRoute, ScrollToTop } from './components';
 import { AdminLayout } from './components/Admin';
@@ -80,6 +84,10 @@ function App() {
           <Route path="system/settings" element={<Settings />} />
           <Route path="system/notifications" element={<Notifications />} />
           <Route path="system/maintenance" element={<Maintenance />} />
+
+          {/* Account */}
+          <Route path="account/profile" element={<Profile />} />
+          <Route path="account/change-password" element={<ChangePassword />} />
         </Route>
 
         {/* 404 - Must be last */}

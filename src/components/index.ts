@@ -4,3 +4,4 @@ export { default as Loading } from './Loading';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as PageHeader } from './PageHeader';
+export * from './Modal';

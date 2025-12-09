@@ -4,6 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
+  isLoading?: boolean;
   fullWidth?: boolean;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
@@ -16,6 +17,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = 'primary',
       size = 'md',
       loading = false,
+      isLoading,
       fullWidth = false,
       icon,
       iconPosition = 'left',
@@ -51,14 +53,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: 'px-7 py-3.5 text-lg',
     };
 
+    const isButtonLoading = isLoading || loading;
+
     return (
       <button
         ref={ref}
-        disabled={disabled || loading}
+        disabled={disabled || isButtonLoading}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
       >
-        {loading ? (
+        {isButtonLoading ? (
           <>
             <svg
               className="animate-spin h-5 w-5"

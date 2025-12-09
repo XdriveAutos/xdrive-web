@@ -2,7 +2,7 @@ import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  error?: boolean;
+  error?: boolean | string;
   errorMessage?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -97,11 +97,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {/* Helper / Error */}
-        {(helperText || errorMessage) && (
+        {(helperText ||
+          errorMessage ||
+          (typeof error === 'string' && error)) && (
           <p
             className={`text-sm ${error ? 'text-(--color-error)' : 'text-(--color-body)'}`}
           >
-            {errorMessage || helperText}
+            {typeof error === 'string' ? error : errorMessage || helperText}
           </p>
         )}
       </div>

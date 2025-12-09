@@ -72,44 +72,32 @@ const SIDEBAR_ITEMS = [
   {
     label: 'Services',
     icon: <ReceiptPercentIcon className="h-6 w-6" />,
-    children: [
-      {
-        label: 'Services',
-        icon: <ReceiptPercentIcon className="h-5 w-5" />,
-        path: '/services/list',
-      },
-      {
-        label: 'Subscriptions',
-        icon: <CurrencyDollarIcon className="h-5 w-5" />,
-        path: '/services/subscriptions',
-      },
-      {
-        label: 'Plans',
-        icon: <CurrencyDollarIcon className="h-5 w-5" />,
-        path: '/services/plans',
-      },
-    ],
+    path: '/services/list',
   },
   {
-    label: 'System',
+    label: 'Subscriptions',
+    icon: <CurrencyDollarIcon className="h-6 w-6" />,
+    path: '/services/subscriptions',
+  },
+  {
+    label: 'Plans',
+    icon: <CurrencyDollarIcon className="h-6 w-6" />,
+    path: '/services/plans',
+  },
+  {
+    label: 'Settings',
     icon: <Cog6ToothIcon className="h-6 w-6" />,
-    children: [
-      {
-        label: 'Settings',
-        icon: <Cog6ToothIcon className="h-5 w-5" />,
-        path: '/system/settings',
-      },
-      {
-        label: 'Notifications',
-        icon: <BellIcon className="h-5 w-5" />,
-        path: '/system/notifications',
-      },
-      {
-        label: 'Maintenance',
-        icon: <ShieldCheckIcon className="h-5 w-5" />,
-        path: '/system/maintenance',
-      },
-    ],
+    path: '/system/settings',
+  },
+  {
+    label: 'Notifications',
+    icon: <BellIcon className="h-6 w-6" />,
+    path: '/system/notifications',
+  },
+  {
+    label: 'Maintenance',
+    icon: <ShieldCheckIcon className="h-6 w-6" />,
+    path: '/system/maintenance',
   },
 ];
 
