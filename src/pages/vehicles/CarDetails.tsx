@@ -21,6 +21,7 @@ import {
   RejectCarModal,
   FeatureCarModal,
   PageHeader,
+  ApproveCarModal,
 } from '@/components';
 import { formatCurrency } from '@/shared/formatters';
 
@@ -36,6 +37,7 @@ const CarDetails = () => {
     unfeatureCar,
     featureCarPending,
     unfeatureCarPending,
+    approveCarPending,
   } = useCars();
 
   const { data: carResponse, isLoading } = useGetCar(id || '');
@@ -44,6 +46,7 @@ const CarDetails = () => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [featureModal, setFeatureModal] = useState(false);
+  const [approveModal, setApproveModal] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   if (isLoading) return <Loading />;
@@ -78,10 +81,15 @@ const CarDetails = () => {
     }
   };
 
-  const handleApprove = async () => {
+  const handleApprove = () => {
+    setApproveModal(true);
+  };
+
+  const confirmApprove = async () => {
     if (!id) return;
     try {
       await approveCar(id);
+      setApproveModal(false);
     } catch (error) {
       console.error('Failed to approve car', error);
     }
@@ -375,6 +383,14 @@ const CarDetails = () => {
         onConfirm={handleToggleFeature}
         car={car}
         isLoading={featureCarPending || unfeatureCarPending}
+      />
+
+      <ApproveCarModal
+        isOpen={approveModal}
+        onClose={() => setApproveModal(false)}
+        onConfirm={confirmApprove}
+        carId={id || null}
+        isLoading={approveCarPending}
       />
     </div>
   );
