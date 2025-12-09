@@ -33,12 +33,8 @@ const Brands = () => {
   const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // View Models state
-  const [viewingBrandModels, setViewingBrandModels] = useState<Brand | null>(
-    null,
-  );
+  const [viewingBrandId, setViewingBrandId] = useState<string | null>(null);
 
-  // Delete confirmation state
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
     brandId: string | null;
@@ -55,10 +51,6 @@ const Brands = () => {
   const handleEdit = (brand: Brand) => {
     setEditingBrand(brand);
     setIsModalOpen(true);
-  };
-
-  const handleViewModels = (brand: Brand) => {
-    setViewingBrandModels(brand);
   };
 
   const confirmDelete = (id: string) => {
@@ -117,7 +109,6 @@ const Brands = () => {
     return <Loading />;
   }
 
-  // Check if brands exist
   const brandsList = allBrands?.data?.data || [];
   const pagination = allBrands?.data?.pagination;
   const isEmpty = brandsList.length === 0;
@@ -189,17 +180,9 @@ const Brands = () => {
                     {brand.name}
                   </h3>
 
-                  <div className="flex items-center gap-1 mt-1">
-                    <p className="text-xs text-(--color-body)">
-                      {brand.car_models?.length || 0} Models
-                    </p>
-                    <button
-                      onClick={() => handleViewModels(brand)}
-                      className="text-xs text-(--color-primary) hover:underline flex items-center gap-0.5 ml-1"
-                    >
-                      <EyeIcon className="h-3 w-3" /> View
-                    </button>
-                  </div>
+                  <p className="text-xs text-(--color-body)">
+                    {brand.car_models?.length || 0} Models
+                  </p>
                 </div>
 
                 <div className="border-t border-(--color-border) p-3 flex justify-between items-center bg-(--color-background)/30 rounded-b-2xl">
@@ -211,6 +194,13 @@ const Brands = () => {
                   </button>
 
                   <div className="flex gap-1">
+                    <button
+                      onClick={() => setViewingBrandId(brand.id)}
+                      className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
+                      title="View Models"
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                    </button>
                     <button
                       onClick={() => handleEdit(brand)}
                       className="p-1.5 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
@@ -250,9 +240,9 @@ const Brands = () => {
       />
 
       <BrandModelsModal
-        isOpen={!!viewingBrandModels}
-        onClose={() => setViewingBrandModels(null)}
-        brand={viewingBrandModels}
+        isOpen={!!viewingBrandId}
+        onClose={() => setViewingBrandId(null)}
+        brandId={viewingBrandId}
       />
 
       {/* Delete Confirmation Modal */}
