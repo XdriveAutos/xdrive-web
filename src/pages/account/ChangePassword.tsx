@@ -1,12 +1,13 @@
 import { PageHeader, Input, Button } from '@/components';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useUsers } from '@/queries/useUsers';
 
 const ChangePassword = () => {
+  const { changePassword, changePasswordPending } = useUsers();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
     watch,
   } = useForm();
@@ -14,10 +15,16 @@ const ChangePassword = () => {
   const newPassword = watch('new_password');
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.success('Password changed successfully');
-    reset();
+    try {
+      await changePassword({
+        current_password: data.current_password,
+        new_password: data.new_password,
+        new_password_confirmation: data.confirm_password,
+      });
+      reset();
+    } catch (error) {
+      console.error('Failed to change password', error);
+    }
   };
 
   return (
@@ -67,7 +74,7 @@ const ChangePassword = () => {
             />
 
             <div className="pt-2 flex justify-end">
-              <Button type="submit" isLoading={isSubmitting}>
+              <Button type="submit" isLoading={changePasswordPending}>
                 Update Password
               </Button>
             </div>

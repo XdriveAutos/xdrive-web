@@ -200,7 +200,6 @@ const Cars = () => {
               key={car.id}
               className="group relative bg-(--color-surface) rounded-2xl border border-(--color-border) overflow-hidden hover:shadow-md transition-all duration-300"
             >
-              {/* Image & Badges */}
               <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                 {car.primary_image ? (
                   <img
@@ -253,7 +252,6 @@ const Cars = () => {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="p-4">
                 <div className="mb-3">
                   <div className="text-xs text-(--color-body) mb-1 flex items-center gap-1">
@@ -272,8 +270,7 @@ const Cars = () => {
                   </div>
                 </div>
 
-                {/* Owner info */}
-                <div className="flex items-center gap-2 mb-4 p-2 rounded-lg bg-(--color-background)/50">
+                <div className="flex items-center gap-2 mb-1 p-2 rounded-lg bg-(--color-background)/50">
                   <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
                     {car.user?.first_name?.charAt(0) || 'U'}
                   </div>
@@ -286,22 +283,22 @@ const Cars = () => {
                     </p>
                   </div>
                 </div>
+              </div>
 
-                {/* Actions */}
-                <div className="grid grid-cols-4 gap-2 border-t border-(--color-border) pt-3">
-                  {/* View - Placeholder for now or just generic View */}
-                  <button
-                    className="col-span-1 flex items-center justify-center p-2 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
-                    title="View Details"
-                  >
-                    <EyeIcon className="h-5 w-5" />
-                  </button>
+              <div className="p-3 bg-(--color-background)/30 border-t border-(--color-border) rounded-b-2xl flex items-center justify-between gap-2">
+                <button
+                  className="p-2 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
+                  title="View Details"
+                >
+                  <EyeIcon className="h-5 w-5" />
+                </button>
 
+                <div className="flex items-center gap-2">
                   {car.status === 'pending' && (
                     <>
                       <button
                         onClick={() => handleApprove(car.id)}
-                        className="col-span-1 flex items-center justify-center p-2 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
+                        className="p-2 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
                         title="Approve"
                       >
                         <CheckCircleIcon className="h-5 w-5" />
@@ -310,7 +307,7 @@ const Cars = () => {
                         onClick={() =>
                           setRejectModal({ isOpen: true, carId: car.id })
                         }
-                        className="col-span-1 flex items-center justify-center p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
                         title="Reject"
                       >
                         <XCircleIcon className="h-5 w-5" />
@@ -322,7 +319,7 @@ const Cars = () => {
                     onClick={() =>
                       setDeleteConfirmation({ isOpen: true, carId: car.id })
                     }
-                    className="col-span-1 flex items-center justify-center p-2 rounded-lg text-(--color-body) hover:bg-red-50 hover:text-red-600 transition-colors ml-auto"
+                    className="p-2 rounded-lg text-(--color-body) hover:bg-red-50 hover:text-red-600 transition-colors"
                     title="Delete"
                   >
                     <TrashIcon className="h-5 w-5" />

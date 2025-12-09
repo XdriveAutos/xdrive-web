@@ -3,6 +3,8 @@ import {
   CreateUserRequest,
   UpdateUserRequest,
   UpdateUserRoleRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
   GetUsersResponse,
   GetUserResponse,
 } from '@/interfaces';
@@ -90,6 +92,22 @@ export const userService = {
   ): Promise<void> => {
     try {
       await api.put(`/admin/users/${id}/role`, data);
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  updateProfile: async (data: UpdateProfileRequest): Promise<void> => {
+    try {
+      await api.put('/profile', data);
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  changePassword: async (data: ChangePasswordRequest): Promise<void> => {
+    try {
+      await api.put('/profile/password', data);
     } catch (error) {
       throw handleApiError(error);
     }

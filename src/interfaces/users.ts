@@ -82,6 +82,22 @@ export interface UpdateUserRoleRequest {
   role: 'user' | 'mechanic' | 'workshop';
 }
 
+export interface UpdateProfileRequest {
+  first_name: string;
+  last_name: string;
+  phone_number: string | null;
+  country: string | null;
+  town_city: string | null;
+  state: string | null;
+  address: string | null;
+}
+
+export interface ChangePasswordRequest {
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
+}
+
 // Response types
 export type GetUsersResponse = BaseResponse<PaginatedData<User>>;
 export type GetUserResponse = BaseResponse<User>;

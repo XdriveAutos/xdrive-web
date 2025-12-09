@@ -5,6 +5,8 @@ import type {
   CreateUserRequest,
   UpdateUserRequest,
   UpdateUserRoleRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
 } from '@/interfaces';
 
 export const useUsers = () => {
@@ -111,6 +113,28 @@ export const useUsers = () => {
     },
   });
 
+  const updateProfileMutation = useMutation({
+    mutationFn: (data: UpdateProfileRequest) => userService.updateProfile(data),
+    onSuccess: () => {
+      toast.success('Profile updated successfully');
+      queryClient.invalidateQueries({ queryKey: ['user'] }); // Invalidate current user data (likely in auth store/hook which uses 'user' key)
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to update profile');
+    },
+  });
+
+  const changePasswordMutation = useMutation({
+    mutationFn: (data: ChangePasswordRequest) =>
+      userService.changePassword(data),
+    onSuccess: () => {
+      toast.success('Password changed successfully');
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to change password');
+    },
+  });
+
   return {
     useGetUsers,
     useGetUser,
@@ -149,5 +173,15 @@ export const useUsers = () => {
     updateUserRoleStatus: updateUserRoleMutation.status,
     updateUserRoleError: updateUserRoleMutation.error,
     updateUserRolePending: updateUserRoleMutation.isPending,
+
+    updateProfile: updateProfileMutation.mutateAsync,
+    updateProfileStatus: updateProfileMutation.status,
+    updateProfileError: updateProfileMutation.error,
+    updateProfilePending: updateProfileMutation.isPending,
+
+    changePassword: changePasswordMutation.mutateAsync,
+    changePasswordStatus: changePasswordMutation.status,
+    changePasswordError: changePasswordMutation.error,
+    changePasswordPending: changePasswordMutation.isPending,
   };
 };
