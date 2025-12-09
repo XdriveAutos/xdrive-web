@@ -47,6 +47,16 @@ import ChangePassword from './pages/account/ChangePassword';
 import { ProtectedRoute, ScrollToTop } from './components';
 import { AdminLayout } from './components/Admin';
 
+// Landing Pages
+import HomeLayout from './components/Landing/HomeLayout';
+import About from './pages/landing/About';
+import Contact from './pages/landing/Contact';
+import Partners from './pages/landing/Partners';
+import Terms from './pages/landing/Terms';
+import Privacy from './pages/landing/Privacy';
+
+// ... other imports
+
 function App() {
   const location = useLocation();
 
@@ -58,8 +68,16 @@ function App() {
     <>
       <ScrollToTop />
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        {/* Landing Routes */}
+        <Route element={<HomeLayout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="partners" element={<Partners />} />
+          <Route path="terms" element={<Terms />} />
+          <Route path="privacy" element={<Privacy />} />
+        </Route>
+
         <Route path="/admin" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />

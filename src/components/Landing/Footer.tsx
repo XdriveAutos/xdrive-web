@@ -88,39 +88,39 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-6 text-white">Company</h3>
             <ul className="space-y-4 text-gray-400 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/about"
                   className="hover:text-(--color-primary) transition-colors"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/partners"
                   className="hover:text-(--color-primary) transition-colors"
                 >
                   Our Partners
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/contact"
                   className="hover:text-(--color-primary) transition-colors"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Legal (Move to follow Company) */}
+          {/* Column 3: Legal */}
           <div>
             <h3 className="text-lg font-bold mb-6 text-white">Legal</h3>
             <ul className="space-y-4 text-gray-400 text-sm">
               <li>
                 <Link
-                  to="#"
+                  to="/terms"
                   className="hover:text-(--color-primary) transition-colors"
                 >
                   Terms of Service
@@ -128,7 +128,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="#"
+                  to="/privacy"
                   className="hover:text-(--color-primary) transition-colors"
                 >
                   Privacy Policy
@@ -137,7 +137,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Contact Us (Centered on mobile, last on desktop) */}
+          {/* Column 4: Contact Us */}
           <div className="col-span-2 lg:col-span-1">
             <h3 className="text-lg font-bold mb-6 text-white">Contact Us</h3>
             <ul className="space-y-4 text-gray-400 text-sm">
