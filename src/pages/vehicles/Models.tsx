@@ -180,8 +180,18 @@ const Models = () => {
                     {model.name}
                   </h3>
 
-                  {/* Brand Hint (if available in future) */}
-                  {/* <p className="text-xs text-gray-500">{model.brand?.name}</p> */}
+                  {/* Brand & Cars Count */}
+                  <div className="space-y-2 mt-1">
+                    {model.brand && (
+                      <p className="text-sm text-(--color-body)">
+                        {model.brand.name}
+                      </p>
+                    )}
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                      {model.cars_count}{' '}
+                      {model.cars_count === 1 ? 'Car' : 'Cars'}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Actions */}

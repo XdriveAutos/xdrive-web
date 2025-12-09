@@ -124,7 +124,7 @@ const EditCar = () => {
   return (
     <div className="pb-20">
       <PageHeader
-        title="Edit Car"
+        title="Edit Car Details"
         description="Update car details and settings"
         icon={<PencilSquareIcon className="h-8 w-8" />}
       />

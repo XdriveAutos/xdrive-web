@@ -306,7 +306,7 @@ const CarDetails = () => {
               onClick={() => navigate(`/vehicles/cars/${id}/edit`)}
               icon={<PencilIcon className="h-5 w-5" />}
             >
-              Edit Car Details
+              Edit
             </Button>
 
             {car.status === 'pending' && (
@@ -342,7 +342,7 @@ const CarDetails = () => {
                 )
               }
             >
-              {car.is_featured ? 'Unfeature Car' : 'Feature Car'}
+              {car.is_featured ? 'Unfeature' : 'Feature'}
             </Button>
 
             <Button
@@ -351,7 +351,7 @@ const CarDetails = () => {
               onClick={() => setDeleteConfirmation(true)}
               icon={<TrashIcon className="h-5 w-5" />}
             >
-              Delete Car
+              Delete
             </Button>
           </div>
         </div>
