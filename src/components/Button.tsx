@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
@@ -38,15 +39,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-(--color-primary) text-(--color-on-primary) hover:bg-(--color-primary)/90 active:scale-98 shadow-lg hover:shadow-xl',
+        'bg-(--color-primary) text-(--color-on-primary) hover:bg-(--color-primary)/90 shadow-lg hover:shadow-xl', // removed active:scale-98 as motion handles it
       secondary:
         'bg-(--color-surface) text-(--color-text) border border-(--color-border) hover:bg-(--color-elevation-2) shadow-sm hover:shadow',
       outline:
-        'bg-transparent text-(--color-primary) border-2 border-(--color-primary) hover:bg-(--color-primary)/5 active:bg-(--color-primary)/10',
+        'bg-transparent text-(--color-primary) border-2 border-(--color-primary) hover:bg-(--color-primary)/5',
       danger:
         'bg-(--color-error) text-(--color-on-error) hover:bg-(--color-error)/90 shadow-lg hover:shadow-xl',
       ghost:
-        'bg-transparent text-(--color-text) hover:bg-(--color-border)/50 active:bg-(--color-border) shadow-none',
+        'bg-transparent text-(--color-text) hover:bg-(--color-border)/50 shadow-none',
     };
 
     const sizes = {
@@ -58,11 +59,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const isButtonLoading = isLoading || loading;
 
     return (
-      <button
+      <motion.button
         ref={ref}
         disabled={disabled || isButtonLoading}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-        {...props}
+        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: disabled || isButtonLoading ? 1 : 1.02 }}
+        {...(props as HTMLMotionProps<'button'>)}
       >
         {isButtonLoading ? (
           <>
@@ -94,7 +97,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon && iconPosition === 'right' && icon}
           </>
         )}
-      </button>
+      </motion.button>
     );
   },
 );

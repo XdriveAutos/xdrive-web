@@ -8,6 +8,8 @@ import {
 import { useAuthStore } from '@/stores';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from '@/components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { scaleIn } from '@/shared';
 
 interface AdminHeaderProps {
   onMenuToggle: () => void;
@@ -90,36 +92,44 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuToggle }) => {
                 </div>
               </button>
 
-              {isMenuOpen && (
-                <div className="absolute right-0 top-12 w-56 bg-(--color-surface) rounded-lg shadow-xl border border-(--color-border) py-2">
-                  <button
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      navigate('/account/profile');
-                    }}
-                    className="w-full px-4 py-2.5 text-left text-sm hover:bg-(--color-hover) transition-colors cursor-pointer"
+              <AnimatePresence>
+                {isMenuOpen && (
+                  <motion.div
+                    variants={scaleIn}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="absolute right-0 top-12 w-56 bg-(--color-surface) rounded-lg shadow-xl border border-(--color-border) py-2 origin-top-right"
                   >
-                    Profile Settings
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      navigate('/account/change-password');
-                    }}
-                    className="w-full px-4 py-2.5 text-left text-sm hover:bg-(--color-hover) transition-colors cursor-pointer"
-                  >
-                    Change Password
-                  </button>
-                  <hr className="my-2 border-(--color-border)" />
-                  <button
-                    onClick={handleLogoutClick}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-(--color-error) hover:bg-error-container transition-colors cursor-pointer"
-                  >
-                    <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
-                    Logout
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        navigate('/account/profile');
+                      }}
+                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-(--color-hover) transition-colors cursor-pointer"
+                    >
+                      Profile Settings
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        navigate('/account/change-password');
+                      }}
+                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-(--color-hover) transition-colors cursor-pointer"
+                    >
+                      Change Password
+                    </button>
+                    <hr className="my-2 border-(--color-border)" />
+                    <button
+                      onClick={handleLogoutClick}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-(--color-error) hover:bg-error-container transition-colors cursor-pointer"
+                    >
+                      <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>

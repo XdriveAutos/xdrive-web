@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { fadeIn, scaleIn } from '@/shared';
+
 interface LoadingProps {
   fullScreen?: boolean;
   message?: string;
@@ -8,7 +11,13 @@ const Loading: React.FC<LoadingProps> = ({
   message = 'Loading...',
 }) => {
   const content = (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <motion.div
+      variants={scaleIn}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col items-center justify-center gap-4"
+    >
       <svg
         className="animate-spin h-12 w-12 text-(--color-primary)"
         viewBox="0 0 24 24"
@@ -31,14 +40,20 @@ const Loading: React.FC<LoadingProps> = ({
       {message && (
         <p className="text-sm font-medium text-(--color-body)">{message}</p>
       )}
-    </div>
+    </motion.div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/95 backdrop-blur-sm">
+      <motion.div
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-white/95 backdrop-blur-sm"
+      >
         {content}
-      </div>
+      </motion.div>
     );
   }
 

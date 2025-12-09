@@ -20,6 +20,7 @@ import {
   StarIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SIDEBAR_ITEMS = [
   {
@@ -243,64 +244,77 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ open, onClose }) => {
         </nav>
       </aside>
 
-      {open && (
-        <aside className="md:hidden fixed top-16 left-0 w-[280px] h-[calc(100vh-64px)] bg-(--color-surface) border-r border-(--color-border) overflow-y-auto z-20">
-          <nav className="flex flex-col h-full antialiased">
-            <ul className="flex-1 px-4 pt-6 space-y-1">
-              {SIDEBAR_ITEMS.map((item) => (
-                <li key={item.label}>
-                  <button
-                    onClick={() => handleParentClick(item)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-colors font-semibold text-base ${
-                      isActive(item.path)
-                        ? 'bg-(--color-primary-container) text-(--color-primary)'
-                        : 'text-(--color-body) hover:bg-(--color-primary-container) hover:text-(--color-primary)'
-                    }`}
+      <AnimatePresence>
+        {open && (
+          <motion.aside
+            initial={{ x: '-100%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: '-100%', opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="md:hidden fixed top-16 left-0 w-[280px] h-[calc(100vh-64px)] bg-(--color-surface) border-r border-(--color-border) overflow-y-auto z-20 shadow-2xl"
+          >
+            <nav className="flex flex-col h-full antialiased">
+              <ul className="flex-1 px-4 pt-6 space-y-1">
+                {SIDEBAR_ITEMS.map((item, index) => (
+                  <motion.li
+                    key={item.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      {item.label}
-                    </div>
-                    {item.children &&
-                      (expanded.includes(item.label) ? (
-                        <ChevronUpIcon className="h-5 w-5" />
-                      ) : (
-                        <ChevronDownIcon className="h-5 w-5" />
-                      ))}
-                  </button>
+                    <button
+                      onClick={() => handleParentClick(item)}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-colors font-semibold text-base ${
+                        isActive(item.path)
+                          ? 'bg-(--color-primary-container) text-(--color-primary)'
+                          : 'text-(--color-body) hover:bg-(--color-primary-container) hover:text-(--color-primary)'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {item.icon}
+                        {item.label}
+                      </div>
+                      {item.children &&
+                        (expanded.includes(item.label) ? (
+                          <ChevronUpIcon className="h-5 w-5" />
+                        ) : (
+                          <ChevronDownIcon className="h-5 w-5" />
+                        ))}
+                    </button>
 
-                  {item.children && expanded.includes(item.label) && (
-                    <ul className="mt-1 space-y-1">
-                      {item.children.map((child) => (
-                        <li key={child.label}>
-                          <button
-                            onClick={() =>
-                              child.path && handleChildClick(child.path)
-                            }
-                            className={`w-full flex items-center gap-3 pl-11 pr-4 py-2 rounded-lg transition-colors text-sm font-medium ${
-                              isActive(child.path)
-                                ? 'bg-(--color-primary-container) text-(--color-primary)'
-                                : 'text-(--color-body) hover:bg-(--color-primary-container) hover:text-(--color-primary)'
-                            }`}
-                          >
-                            {child.icon}
-                            {child.label}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    {item.children && expanded.includes(item.label) && (
+                      <ul className="mt-1 space-y-1">
+                        {item.children.map((child) => (
+                          <li key={child.label}>
+                            <button
+                              onClick={() =>
+                                child.path && handleChildClick(child.path)
+                              }
+                              className={`w-full flex items-center gap-3 pl-11 pr-4 py-2 rounded-lg transition-colors text-sm font-medium ${
+                                isActive(child.path)
+                                  ? 'bg-(--color-primary-container) text-(--color-primary)'
+                                  : 'text-(--color-body) hover:bg-(--color-primary-container) hover:text-(--color-primary)'
+                              }`}
+                            >
+                              {child.icon}
+                              {child.label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </motion.li>
+                ))}
+              </ul>
 
-            <div className="p-4 border-t border-(--color-border) bg-(--color-elevation-1) text-center text-xs text-(--color-inactive)">
-              <p>Xdrive Admin v1.0</p>
-              <p className="mt-1">© {currentYear} Xdrive Automobile</p>
-            </div>
-          </nav>
-        </aside>
-      )}
+              <div className="p-4 border-t border-(--color-border) bg-(--color-elevation-1) text-center text-xs text-(--color-inactive)">
+                <p>Xdrive Admin v1.0</p>
+                <p className="mt-1">© {currentYear} Xdrive Automobile</p>
+              </div>
+            </nav>
+          </motion.aside>
+        )}
+      </AnimatePresence>
     </>
   );
 };

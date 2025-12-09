@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { motion } from 'framer-motion';
+import { fadeInUp, staggerContainerFast } from '@/shared';
 
 interface PageHeaderProps {
   title: string;
@@ -22,15 +24,25 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <title>{pageTitle} | Xdrive Admin</title>
       </Helmet>
 
-      <div className="mb-12 pt-8">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-(--color-text) flex items-center gap-4 mb-3">
+      <motion.div
+        className="mb-12 pt-8"
+        variants={staggerContainerFast}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h1
+          className="text-4xl md:text-5xl font-extrabold text-(--color-text) flex items-center gap-4 mb-3"
+          variants={fadeInUp}
+        >
           {icon && <span className="text-(--color-primary)">{icon}</span>}
           {title}
-        </h1>
+        </motion.h1>
         {description && (
-          <p className="text-lg text-(--color-body)">{description}</p>
+          <motion.p className="text-lg text-(--color-body)" variants={fadeInUp}>
+            {description}
+          </motion.p>
         )}
-      </div>
+      </motion.div>
     </>
   );
 };
