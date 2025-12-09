@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import { Button, Input } from '@/components';
 import AuthLayout from '@/components/Auth/AuthLayout';
-import { useAuth } from '@/queries/useAuth';
+import { useAuth } from '@/queries';
 import type { ForgotPasswordRequest } from '@/interfaces';
+import { validateEmailDomain } from '@/shared';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -38,10 +38,7 @@ const ForgotPassword = () => {
           errorMessage={errors.email?.message}
           {...register('email', {
             required: 'Email is required',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
-            },
+            validate: validateEmailDomain,
           })}
         />
 

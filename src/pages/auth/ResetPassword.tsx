@@ -7,8 +7,7 @@ import {
   EyeSlashIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import { Button, Input } from '@/components';
 import AuthLayout from '@/components/Auth/AuthLayout';
 import { useAuth } from '@/queries/useAuth';
 

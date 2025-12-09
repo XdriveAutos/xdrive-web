@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import { Button, Input } from '@/components';
 import AuthLayout from '@/components/Auth/AuthLayout';
 import { useAuth } from '@/queries/useAuth';
 import type { VerifyForgotPasswordRequest } from '@/interfaces';

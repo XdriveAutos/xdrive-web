@@ -6,12 +6,12 @@ import {
   EyeIcon,
   EyeSlashIcon,
 } from '@heroicons/react/24/outline';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
 import AuthLayout from '@/components/Auth/AuthLayout';
-import { useAuth } from '@/queries/useAuth';
+import { useAuth } from '@/queries';
 import type { LoginRequest } from '@/interfaces';
+import { validateEmailDomain } from '@/shared';
 import { useState } from 'react';
+import { Button, Input } from '@/components';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -41,7 +41,10 @@ const Home = () => {
           placeholder="admin@example.com"
           leftIcon={<EnvelopeIcon className="h-5 w-5" />}
           errorMessage={errors.email?.message}
-          {...register('email', { required: 'Email is required' })}
+          {...register('email', {
+            required: 'Email is required',
+            validate: validateEmailDomain,
+          })}
         />
 
         <Input
