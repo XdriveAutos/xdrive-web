@@ -285,45 +285,53 @@ const Cars = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-(--color-background)/30 border-t border-(--color-border) rounded-b-2xl flex items-center justify-between gap-2">
-                <button
-                  className="p-2 rounded-lg text-(--color-body) hover:bg-(--color-hover) hover:text-(--color-primary) transition-colors"
-                  title="View Details"
-                >
-                  <EyeIcon className="h-5 w-5" />
-                </button>
+              {/* Actions */}
+              <div className="p-4 border-t border-(--color-border) space-y-2">
+                {car.status === 'pending' && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="justify-center text-emerald-600 hover:bg-emerald-50 border-emerald-200"
+                      onClick={() => handleApprove(car.id)}
+                      icon={<CheckCircleIcon className="h-4 w-4" />}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="justify-center text-red-600 hover:bg-red-50 border-red-200"
+                      onClick={() =>
+                        setRejectModal({ isOpen: true, carId: car.id })
+                      }
+                      icon={<XCircleIcon className="h-4 w-4" />}
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                )}
 
-                <div className="flex items-center gap-2">
-                  {car.status === 'pending' && (
-                    <>
-                      <button
-                        onClick={() => handleApprove(car.id)}
-                        className="p-2 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
-                        title="Approve"
-                      >
-                        <CheckCircleIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() =>
-                          setRejectModal({ isOpen: true, carId: car.id })
-                        }
-                        className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-                        title="Reject"
-                      >
-                        <XCircleIcon className="h-5 w-5" />
-                      </button>
-                    </>
-                  )}
-
-                  <button
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-center text-(--color-body) hover:text-(--color-primary)"
+                    icon={<EyeIcon className="h-4 w-4" />}
+                  >
+                    View
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-center text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
                     onClick={() =>
                       setDeleteConfirmation({ isOpen: true, carId: car.id })
                     }
-                    className="p-2 rounded-lg text-(--color-body) hover:bg-red-50 hover:text-red-600 transition-colors"
-                    title="Delete"
+                    icon={<TrashIcon className="h-4 w-4" />}
                   >
-                    <TrashIcon className="h-5 w-5" />
-                  </button>
+                    Delete
+                  </Button>
                 </div>
               </div>
             </div>
