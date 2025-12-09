@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useCars } from '@/queries/useCars';
 import { useBrand } from '@/queries/useBrand';
 import { useBodyType } from '@/queries/useBodyType';
@@ -130,24 +130,16 @@ const EditCar = () => {
 
   return (
     <div className="pb-20">
-      <div className="flex items-center gap-4 mb-2">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-lg hover:bg-(--color-background) text-(--color-body) hover:text-(--color-text) transition-colors"
-        >
-          <ArrowLeftIcon className="h-6 w-6" />
-        </button>
-      </div>
-
       <PageHeader
         title="Edit Car"
         description="Update car details and settings"
+        icon={<PencilSquareIcon className="h-8 w-8" />}
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {/* Left Column (Main Content) */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 flex flex-col gap-6 h-full">
             {/* Basic Info */}
             <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4">
               <h2 className="text-lg font-bold text-(--color-text) border-b pb-2">
@@ -285,7 +277,7 @@ const EditCar = () => {
             </div>
 
             {/* Specifications */}
-            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4">
+            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4 flex-1">
               <h2 className="text-lg font-bold text-(--color-text) border-b pb-2">
                 Specifications
               </h2>
@@ -412,7 +404,7 @@ const EditCar = () => {
           </div>
 
           {/* Right Column (Sidebar) */}
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6 h-full">
             {/* Pricing & Listing */}
             <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4">
               <h2 className="text-lg font-bold text-(--color-text) border-b pb-2">
@@ -498,7 +490,7 @@ const EditCar = () => {
             </div>
 
             {/* Settings & Status */}
-            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4">
+            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 space-y-4 flex-1">
               <h2 className="text-lg font-bold text-(--color-text) border-b pb-2">
                 Settings
               </h2>
@@ -592,7 +584,7 @@ const EditCar = () => {
         </div>
 
         {/* Action Buttons (Full Width, Bottom) */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-(--color-border)">
+        <div className="flex justify-center gap-3 pt-6 border-t border-(--color-border)">
           <Button variant="outline" onClick={() => navigate(-1)} type="button">
             Cancel
           </Button>

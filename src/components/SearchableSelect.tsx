@@ -37,10 +37,8 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Find selected option object
   const selectedOption = options.find((opt) => opt.id === value);
 
-  // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       onSearch(searchTerm);

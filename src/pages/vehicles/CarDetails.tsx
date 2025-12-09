@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ArrowLeftIcon,
   CalendarIcon,
   MapPinIcon,
   PencilIcon,
@@ -11,6 +10,7 @@ import {
   StarIcon,
   PhoneIcon,
   UserIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { useCars } from '@/queries/useCars';
@@ -111,18 +111,10 @@ const CarDetails = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-2">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-lg hover:bg-(--color-background) text-(--color-body) hover:text-(--color-text) transition-colors"
-        >
-          <ArrowLeftIcon className="h-6 w-6" />
-        </button>
-      </div>
-
       <PageHeader
         title="Car Details"
         description="View and manage car listing"
+        icon={<InformationCircleIcon className="h-8 w-8" />}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
