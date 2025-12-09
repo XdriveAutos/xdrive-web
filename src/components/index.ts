@@ -16,3 +16,4 @@ export * from './Service';
 export * from './Subscription';
 export * from './User';
 export * from './Car';
+export * from './Notification';

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { notificationService } from '@/services';
 import type {
@@ -6,13 +6,19 @@ import type {
   SendNotificationRequest,
 } from '@/interfaces';
 
-export const useNotifications = () => {
+export const useNotifications = (page = 1, perPage = 20) => {
+  // Query
+  const notificationsQuery = useQuery({
+    queryKey: ['notifications', page, perPage],
+    queryFn: () => notificationService.getAll(page, perPage),
+  });
+
   // Mutations
   const broadcastNotificationMutation = useMutation({
     mutationFn: (data: BroadcastNotificationRequest) =>
       notificationService.broadcast(data),
     onSuccess: () => {
-      toast.success('Notification broadcasted successfully');
+      toast.success('Notification broadcasted');
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to broadcast notification');
@@ -28,7 +34,7 @@ export const useNotifications = () => {
       data: SendNotificationRequest;
     }) => notificationService.sendToUser(userId, data),
     onSuccess: () => {
-      toast.success('Notification sent successfully');
+      toast.success('Notification sent');
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to send notification');
@@ -36,6 +42,10 @@ export const useNotifications = () => {
   });
 
   return {
+    notifications: notificationsQuery.data,
+    notificationsLoading: notificationsQuery.isLoading,
+    notificationsError: notificationsQuery.error,
+
     broadcastNotification: broadcastNotificationMutation.mutateAsync,
     broadcastNotificationStatus: broadcastNotificationMutation.status,
     broadcastNotificationError: broadcastNotificationMutation.error,
