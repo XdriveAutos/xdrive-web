@@ -4,6 +4,7 @@ import {
   ArrowLeftIcon,
   CalendarIcon,
   MapPinIcon,
+  PencilIcon,
   CheckCircleIcon,
   XCircleIcon,
   TrashIcon,
@@ -19,6 +20,7 @@ import {
   DeleteCarModal,
   RejectCarModal,
   FeatureCarModal,
+  PageHeader,
 } from '@/components';
 import { formatCurrency } from '@/shared/formatters';
 
@@ -109,20 +111,19 @@ const CarDetails = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mb-2">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-body) hover:text-(--color-text) transition-colors"
+          className="p-2 -ml-2 rounded-lg hover:bg-(--color-background) text-(--color-body) hover:text-(--color-text) transition-colors"
         >
           <ArrowLeftIcon className="h-6 w-6" />
         </button>
-        <div>
-          <h1 className="text-2xl font-bold text-(--color-text)">
-            Car Details
-          </h1>
-          <p className="text-(--color-body)">View and manage car listing</p>
-        </div>
       </div>
+
+      <PageHeader
+        title="Car Details"
+        description="View and manage car listing"
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Images & Specs */}
@@ -306,6 +307,15 @@ const CarDetails = () => {
             <h3 className="text-lg font-bold text-(--color-text) mb-4">
               Actions
             </h3>
+
+            <Button
+              variant="outline"
+              className="w-full justify-center text-(--color-body) hover:text-(--color-primary)"
+              onClick={() => navigate(`/vehicles/cars/${id}/edit`)}
+              icon={<PencilIcon className="h-5 w-5" />}
+            >
+              Edit Car Details
+            </Button>
 
             {car.status === 'pending' && (
               <div className="grid grid-cols-2 gap-3">

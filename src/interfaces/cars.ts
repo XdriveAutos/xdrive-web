@@ -44,6 +44,7 @@ export interface Car {
   rejection_reason: string | null;
   is_featured: boolean;
   flagged: number;
+  is_approved: boolean;
   views_count: number;
   sold_at: string | null;
   featured_until: string | null;
@@ -74,23 +75,48 @@ export interface UpdateCarRequest {
   brand_id?: string;
   car_model_id?: string;
   body_type_id?: string;
+  year_of_manufacture?: number;
+  trim?: string;
+  color?: string;
+  condition?: 'new' | 'used' | 'certified';
+  second_condition?: 'Excellent' | 'Good' | 'Fair' | 'Salvage';
+  transmission?:
+    | 'automatic'
+    | 'manual'
+    | 'cvt'
+    | 'dct'
+    | 'semi_automatic'
+    | 'sequential'
+    | 'tiptronic'
+    | 'dsg'
+    | 'amt'
+    | 'direct_shift'
+    | 'e_cvt'
+    | 'hybrid'
+    | 'single_speed';
+  mileage?: number;
+  fuel_type?: 'petrol' | 'diesel' | 'electric' | 'hybrid';
+  gear_type?: 'type_s' | 'type_a' | 'type_b';
+  engine_size?: number;
+  horse_power?: string;
+  number_of_seats?: number;
+  key_features?: string;
+  registered_car?: string;
+  my_chasis_number?: string;
+  price?: number;
+  price_negotiable?: 'negotiable' | 'fix_amount';
+  listing_type?: 'sell' | 'swap';
+  swap_method?: 'sell' | 'swap' | 'both';
+  swap_with?: string;
+  status?: 'active' | 'inactive' | 'sold' | 'pending' | 'approved' | 'rejected';
+  rejection_reason?: string;
+  is_featured?: boolean;
+  flagged?: boolean;
+  is_approved?: boolean;
   address?: string;
   city?: string;
   state?: string;
   country?: string;
-  year_of_manufacture?: number;
-  price?: number;
-  price_negotiable?: boolean;
-  listing_type?: string;
-  transmission?: string;
-  fuel_type?: string;
-  condition?: string;
-  mileage?: number;
-  engine_size?: number;
-  color?: string;
-  is_featured?: boolean;
-  is_approved?: boolean;
-  status?: string;
 }
 
 export interface RejectCarRequest {
