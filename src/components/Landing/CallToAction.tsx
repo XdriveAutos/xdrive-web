@@ -15,7 +15,7 @@ const CallToAction = () => {
           <h2 className="text-3xl lg:text-4xl font-bold text-(--color-primary) mb-8">
             Get the APP Now
           </h2>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-row gap-6 justify-center items-center">
             <a
               href="#"
               className="transition-transform hover:scale-105 active:scale-95 shadow-lg rounded-xl overflow-hidden"
@@ -23,7 +23,7 @@ const CallToAction = () => {
               <img
                 src={PlayStoreImg}
                 alt="Get it on Google Play"
-                className="h-16 w-auto"
+                className="h-12 sm:h-16 w-auto"
               />
             </a>
             <a
@@ -33,7 +33,7 @@ const CallToAction = () => {
               <img
                 src={AppStoreImg}
                 alt="Download on the App Store"
-                className="h-16 w-auto"
+                className="h-12 sm:h-16 w-auto"
               />
             </a>
           </div>

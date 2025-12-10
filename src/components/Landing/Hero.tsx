@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import AppStoreImg from '@/assets/store/app-store.png';
 import PlayStoreImg from '@/assets/store/play-store.png';
@@ -51,7 +50,7 @@ const Hero = () => {
               <h3 className="text-xl font-bold mb-4 text-center">
                 Get the APP Now
               </h3>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-row gap-4 justify-center">
                 <a
                   href="#"
                   className="transition-transform hover:scale-105 active:scale-95"
@@ -74,18 +73,6 @@ const Hero = () => {
                 </a>
               </div>
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="pt-4 flex items-center justify-center lg:justify-start gap-2 text-sm text-(--color-primary-container) font-medium cursor-pointer hover:text-white transition-colors"
-            >
-              <span className="underline decoration-(--color-primary-container) underline-offset-4">
-                Learn more about our services
-              </span>
-              <ArrowRightIcon className="h-4 w-4" />
-            </motion.div>
           </motion.div>
 
           <motion.div
@@ -98,7 +85,7 @@ const Hero = () => {
               <img
                 src={MockupImg}
                 alt="App Interface Mockup"
-                className="mx-auto w-full max-w-[280px] lg:max-w-[320px] drop-shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700 ease-out"
+                className="mx-auto w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[320px] drop-shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700 ease-out"
               />
             </div>
             {/* Decorative circles behind phone */}
