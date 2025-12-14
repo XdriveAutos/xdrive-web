@@ -13,6 +13,7 @@ import {
   PlanModal,
   PlanFeaturesModal,
   DeletePlanModal,
+  TogglePlanStatusModal,
 } from '@/components/Plan';
 import { Plan, CreatePlanRequest } from '@/interfaces/plan';
 import { formatCurrency } from '@/shared/formatters';
@@ -40,6 +41,14 @@ const Plans = () => {
   }>({
     isOpen: false,
     planId: null,
+  });
+
+  const [toggleStatusConfirmation, setToggleStatusConfirmation] = useState<{
+    isOpen: boolean;
+    plan: Plan | null;
+  }>({
+    isOpen: false,
+    plan: null,
   });
 
   const handleCreate = () => {
@@ -72,12 +81,18 @@ const Plans = () => {
     }
   };
 
-  const handleToggleActive = async (plan: Plan) => {
+  const confirmToggleActive = (plan: Plan) => {
+    setToggleStatusConfirmation({ isOpen: true, plan });
+  };
+
+  const handleToggleActive = async () => {
+    if (!toggleStatusConfirmation.plan) return;
     try {
       await update({
-        id: plan.id,
-        data: { is_active: !plan.is_active },
+        id: toggleStatusConfirmation.plan.id,
+        data: { is_active: !toggleStatusConfirmation.plan.is_active },
       });
+      setToggleStatusConfirmation({ isOpen: false, plan: null });
     } catch (error) {
       console.error('Failed to update plan status', error);
     }
@@ -201,7 +216,7 @@ const Plans = () => {
                   variant="outline"
                   size="sm"
                   className="flex-1"
-                  onClick={() => handleToggleActive(plan)}
+                  onClick={() => confirmToggleActive(plan)}
                 >
                   {plan.is_active ? 'Deactivate' : 'Activate'}
                 </Button>
@@ -243,6 +258,15 @@ const Plans = () => {
         isOpen={deleteConfirmation.isOpen}
         onClose={() => setDeleteConfirmation({ isOpen: false, planId: null })}
         onConfirm={confirmDelete}
+      />
+
+      <TogglePlanStatusModal
+        isOpen={toggleStatusConfirmation.isOpen}
+        onClose={() =>
+          setToggleStatusConfirmation({ isOpen: false, plan: null })
+        }
+        onConfirm={handleToggleActive}
+        plan={toggleStatusConfirmation.plan}
       />
     </div>
   );

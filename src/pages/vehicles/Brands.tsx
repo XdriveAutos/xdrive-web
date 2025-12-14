@@ -16,6 +16,7 @@ import {
   BrandModal,
   BrandModelsModal,
   DeleteBrandModal,
+  ToggleBrandStatusModal,
 } from '@/components/Brand';
 import {
   Brand,
@@ -49,6 +50,14 @@ const Brands = () => {
     brandId: null,
   });
 
+  const [toggleStatusConfirmation, setToggleStatusConfirmation] = useState<{
+    isOpen: boolean;
+    brand: Brand | null;
+  }>({
+    isOpen: false,
+    brand: null,
+  });
+
   const handleCreate = () => {
     setEditingBrand(null);
     setIsModalOpen(true);
@@ -75,12 +84,18 @@ const Brands = () => {
     }
   };
 
-  const handleToggleActive = async (brand: Brand) => {
+  const confirmToggleActive = (brand: Brand) => {
+    setToggleStatusConfirmation({ isOpen: true, brand });
+  };
+
+  const handleToggleActive = async () => {
+    if (!toggleStatusConfirmation.brand) return;
     try {
       await updateBrand({
-        id: brand.id,
-        data: { is_active: !brand.is_active },
+        id: toggleStatusConfirmation.brand.id,
+        data: { is_active: !toggleStatusConfirmation.brand.is_active },
       });
+      setToggleStatusConfirmation({ isOpen: false, brand: null });
     } catch (error) {
       console.error('Failed to update brand status', error);
       toast.error('Failed to update brand status');
@@ -248,7 +263,7 @@ const Brands = () => {
                           ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
                           : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
                       }`}
-                      onClick={() => handleToggleActive(brand)}
+                      onClick={() => confirmToggleActive(brand)}
                       icon={
                         brand.is_active ? (
                           <XCircleIcon className="h-4 w-4" />
@@ -303,6 +318,15 @@ const Brands = () => {
         isOpen={deleteConfirmation.isOpen}
         onClose={() => setDeleteConfirmation({ isOpen: false, brandId: null })}
         onConfirm={handleDelete}
+      />
+
+      <ToggleBrandStatusModal
+        isOpen={toggleStatusConfirmation.isOpen}
+        onClose={() =>
+          setToggleStatusConfirmation({ isOpen: false, brand: null })
+        }
+        onConfirm={handleToggleActive}
+        brand={toggleStatusConfirmation.brand}
       />
     </div>
   );

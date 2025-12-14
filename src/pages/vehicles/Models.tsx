@@ -11,7 +11,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { useCarModel } from '@/queries';
 import { Button, Loading, Pagination, Input } from '@/components';
-import { ModelModal, DeleteModelModal } from '@/components';
+import {
+  ModelModal,
+  DeleteModelModal,
+  ToggleCarModelStatusModal,
+} from '@/components';
 import { CarModel } from '@/interfaces';
 
 const Models = () => {
@@ -33,6 +37,14 @@ const Models = () => {
   }>({
     isOpen: false,
     modelId: null,
+  });
+
+  const [toggleStatusConfirmation, setToggleStatusConfirmation] = useState<{
+    isOpen: boolean;
+    model: CarModel | null;
+  }>({
+    isOpen: false,
+    model: null,
   });
 
   const handleCreate = () => {
@@ -60,12 +72,18 @@ const Models = () => {
     }
   };
 
-  const handleToggleActive = async (model: CarModel) => {
+  const confirmToggleActive = (model: CarModel) => {
+    setToggleStatusConfirmation({ isOpen: true, model });
+  };
+
+  const handleToggleActive = async () => {
+    if (!toggleStatusConfirmation.model) return;
     try {
       await updateCarModel({
-        id: model.id,
-        data: { is_active: !model.is_active },
+        id: toggleStatusConfirmation.model.id,
+        data: { is_active: !toggleStatusConfirmation.model.is_active },
       });
+      setToggleStatusConfirmation({ isOpen: false, model: null });
     } catch (error) {
       console.error('Failed to update model status', error);
     }
@@ -214,7 +232,7 @@ const Models = () => {
                           ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
                           : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
                       }`}
-                      onClick={() => handleToggleActive(model)}
+                      onClick={() => confirmToggleActive(model)}
                       icon={
                         model.is_active ? (
                           <XCircleIcon className="h-4 w-4" />
@@ -260,6 +278,15 @@ const Models = () => {
         isOpen={deleteConfirmation.isOpen}
         onClose={() => setDeleteConfirmation({ isOpen: false, modelId: null })}
         onConfirm={handleDelete}
+      />
+
+      <ToggleCarModelStatusModal
+        isOpen={toggleStatusConfirmation.isOpen}
+        onClose={() =>
+          setToggleStatusConfirmation({ isOpen: false, model: null })
+        }
+        onConfirm={handleToggleActive}
+        model={toggleStatusConfirmation.model}
       />
     </div>
   );

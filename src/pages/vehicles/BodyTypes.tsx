@@ -10,7 +10,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { useBodyType } from '@/queries/useBodyType';
 import { Button, Loading } from '@/components';
-import { BodyTypeModal, DeleteBodyTypeModal } from '@/components/BodyType';
+import {
+  BodyTypeModal,
+  DeleteBodyTypeModal,
+  ToggleBodyTypeStatusModal,
+} from '@/components/BodyType';
 import {
   BodyType,
   CreateBodyTypeRequest,
@@ -34,6 +38,14 @@ const BodyTypes = () => {
   }>({
     isOpen: false,
     bodyTypeId: null,
+  });
+
+  const [toggleStatusConfirmation, setToggleStatusConfirmation] = useState<{
+    isOpen: boolean;
+    bodyType: BodyType | null;
+  }>({
+    isOpen: false,
+    bodyType: null,
   });
 
   const handleCreate = () => {
@@ -61,12 +73,18 @@ const BodyTypes = () => {
     }
   };
 
-  const handleToggleActive = async (bodyType: BodyType) => {
+  const confirmToggleActive = (bodyType: BodyType) => {
+    setToggleStatusConfirmation({ isOpen: true, bodyType });
+  };
+
+  const handleToggleActive = async () => {
+    if (!toggleStatusConfirmation.bodyType) return;
     try {
       await updateBodyType({
-        id: bodyType.id,
-        data: { is_active: !bodyType.is_active },
+        id: toggleStatusConfirmation.bodyType.id,
+        data: { is_active: !toggleStatusConfirmation.bodyType.is_active },
       });
+      setToggleStatusConfirmation({ isOpen: false, bodyType: null });
     } catch (error) {
       console.error('Failed to update body type status', error);
     }
@@ -204,7 +222,7 @@ const BodyTypes = () => {
                         ? 'text-gray-600 hover:bg-gray-50 border-gray-200'
                         : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
                     }`}
-                    onClick={() => handleToggleActive(bodyType)}
+                    onClick={() => confirmToggleActive(bodyType)}
                     icon={
                       bodyType.is_active ? (
                         <XCircleIcon className="h-4 w-4" />
@@ -246,6 +264,15 @@ const BodyTypes = () => {
           setDeleteConfirmation({ isOpen: false, bodyTypeId: null })
         }
         onConfirm={handleDelete}
+      />
+
+      <ToggleBodyTypeStatusModal
+        isOpen={toggleStatusConfirmation.isOpen}
+        onClose={() =>
+          setToggleStatusConfirmation({ isOpen: false, bodyType: null })
+        }
+        onConfirm={handleToggleActive}
+        bodyType={toggleStatusConfirmation.bodyType}
       />
     </div>
   );

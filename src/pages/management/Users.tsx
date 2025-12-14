@@ -19,6 +19,7 @@ import {
   UserDeleteModal,
   UserSuspendModal,
   UserActivateModal,
+  UserVerifyEmailModal,
 } from '@/components/User';
 import { UsersFilter } from './components/UsersFilter';
 import { User, UserQueryParams } from '@/interfaces';
@@ -121,6 +122,14 @@ const Users = () => {
     user: null,
   });
 
+  const [verifyEmailConfirmation, setVerifyEmailConfirmation] = useState<{
+    isOpen: boolean;
+    userId: string | null;
+  }>({
+    isOpen: false,
+    userId: null,
+  });
+
   const confirmDelete = (id: string) => {
     setDeleteConfirmation({ isOpen: true, userId: id });
   };
@@ -166,9 +175,15 @@ const Users = () => {
     }
   };
 
-  const handleVerifyEmail = async (id: string) => {
+  const confirmVerifyEmail = (id: string) => {
+    setVerifyEmailConfirmation({ isOpen: true, userId: id });
+  };
+
+  const handleVerifyEmail = async () => {
+    if (!verifyEmailConfirmation.userId) return;
     try {
-      await verifyUserEmail(id);
+      await verifyUserEmail(verifyEmailConfirmation.userId);
+      setVerifyEmailConfirmation({ isOpen: false, userId: null });
     } catch (error) {
       console.error('Failed to verify email', error);
     }
@@ -338,7 +353,7 @@ const Users = () => {
                         variant="outline"
                         size="sm"
                         className="w-full justify-center text-blue-600 hover:bg-blue-50 border-blue-200"
-                        onClick={() => handleVerifyEmail(user.id)}
+                        onClick={() => confirmVerifyEmail(user.id)}
                         icon={<EnvelopeIcon className="h-4 w-4" />}
                       >
                         Verify Email
@@ -424,6 +439,14 @@ const Users = () => {
         onClose={() => setActivateConfirmation({ isOpen: false, user: null })}
         onConfirm={handleActivate}
         user={activateConfirmation.user}
+        isLoading={false}
+      />
+      <UserVerifyEmailModal
+        isOpen={verifyEmailConfirmation.isOpen}
+        onClose={() =>
+          setVerifyEmailConfirmation({ isOpen: false, userId: null })
+        }
+        onConfirm={handleVerifyEmail}
         isLoading={false}
       />
     </div>
