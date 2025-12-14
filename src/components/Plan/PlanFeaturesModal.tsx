@@ -14,6 +14,7 @@ import {
   AddPlanFeatureRequest,
   UpdatePlanFeatureRequest,
 } from '@/interfaces/plan';
+import { Feature, FEATURE_LABELS, getFeatureLabel } from '@/enums/Feature';
 import { toast } from 'sonner';
 
 interface PlanFeaturesModalProps {
@@ -149,7 +150,7 @@ const PlanFeaturesModal: React.FC<PlanFeaturesModalProps> = ({
                   <div className="flex-1 mr-4">
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-(--color-text)">
-                        {feature.feature_name}
+                        {getFeatureLabel(feature.feature_name)}
                       </p>
                       {!feature.is_active && (
                         <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">
@@ -205,14 +206,30 @@ const PlanFeaturesModal: React.FC<PlanFeaturesModalProps> = ({
                 </h4>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input
-                    label="Name"
-                    placeholder="e.g. 5 Listings"
-                    error={errors.feature_name?.message}
-                    {...register('feature_name', {
-                      required: 'Name is required',
-                    })}
-                  />
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-(--color-text)">
+                      Feature
+                    </label>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-(--color-border) bg-(--color-background) px-3 py-2 text-sm text-(--color-text) ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...register('feature_name', {
+                        required: 'Feature is required',
+                      })}
+                    >
+                      <option value="">Select a feature</option>
+                      {Object.values(Feature).map((feature) => (
+                        <option key={feature} value={feature}>
+                          {FEATURE_LABELS[feature]}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.feature_name && (
+                      <p className="text-sm text-red-500">
+                        {errors.feature_name.message}
+                      </p>
+                    )}
+                  </div>
+
                   <Input
                     label="Value (Optional)"
                     placeholder="e.g. 5"
