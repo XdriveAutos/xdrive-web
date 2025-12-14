@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '@/components/PageHeader';
 import {
   CurrencyDollarIcon,
@@ -20,6 +21,7 @@ import { formatCurrency } from '@/shared/formatters';
 import { toast } from 'sonner';
 
 const Plans = () => {
+  const navigate = useNavigate();
   const {
     allPlans,
     allPlansLoading,
@@ -52,8 +54,7 @@ const Plans = () => {
   });
 
   const handleCreate = () => {
-    setEditingPlan(null);
-    setIsModalOpen(true);
+    navigate('/services/plans/create');
   };
 
   const handleEdit = (plan: Plan) => {

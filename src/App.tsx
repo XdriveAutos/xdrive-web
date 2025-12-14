@@ -25,6 +25,7 @@ import BodyTypes from './pages/vehicles/BodyTypes';
 import ServicesList from './pages/services/ServicesList';
 import Subscriptions from './pages/services/Subscriptions';
 import Plans from './pages/services/Plans';
+import CreatePlan from './pages/services/CreatePlan';
 import Settings from './pages/system/Settings';
 import Notifications from './pages/system/Notifications';
 import Maintenance from './pages/system/Maintenance';
@@ -125,6 +126,7 @@ function App() {
           <Route path="services/list" element={<ServicesList />} />
           <Route path="services/subscriptions" element={<Subscriptions />} />
           <Route path="services/plans" element={<Plans />} />
+          <Route path="services/plans/create" element={<CreatePlan />} />
 
           {/* System */}
           <Route path="system/settings" element={<Settings />} />

@@ -1,6 +1,11 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
+import {
+  UserPlusIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from '@heroicons/react/24/outline';
 import { useUsers } from '@/queries/useUsers';
 import { Button, Input, PageHeader } from '@/components';
 import { CreateUserRequest } from '@/interfaces/users';
@@ -8,6 +13,7 @@ import { CreateUserRequest } from '@/interfaces/users';
 const CreateUser = () => {
   const navigate = useNavigate();
   const { createUser, createUserPending } = useUsers();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -39,9 +45,9 @@ const CreateUser = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         <form onSubmit={handleSubmit(onSubmit)} className="contents">
           {/* Left Column (Main Content) */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2">
             {/* Personal Info Card */}
-            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 md:p-8 shadow-sm">
+            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 md:p-8 shadow-sm h-full">
               <h3 className="text-lg font-bold text-(--color-text) mb-6">
                 Personal Information
               </h3>
@@ -84,7 +90,7 @@ const CreateUser = () => {
 
                 <Input
                   label="Password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   {...register('password', {
                     required: 'Password is required for new users',
                     minLength: {
@@ -92,49 +98,57 @@ const CreateUser = () => {
                       message: 'Password must be at least 8 characters',
                     },
                   })}
+                  rightIcon={
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-5 w-5" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5" />
+                      )}
+                    </button>
+                  }
                   error={errors.password?.message}
                   placeholder="********"
                 />
               </div>
             </div>
+          </div>
 
+          {/* Right Column (Sidebar) */}
+          <div className="flex flex-col gap-6">
             {/* Address Info Card */}
-            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 md:p-8 shadow-sm">
+            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 shadow-sm">
               <h3 className="text-lg font-bold text-(--color-text) mb-6">
                 Address Information
               </h3>
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Input
-                    label="Country"
-                    {...register('country')}
-                    placeholder="Country"
-                  />
-                  <Input
-                    label="State/Province"
-                    {...register('state')}
-                    placeholder="State"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Input
-                    label="City"
-                    {...register('town_city')}
-                    placeholder="City"
-                  />
-                  <Input
-                    label="Address"
-                    {...register('address')}
-                    placeholder="Address"
-                  />
-                </div>
+                <Input
+                  label="Country"
+                  {...register('country')}
+                  placeholder="Country"
+                />
+                <Input
+                  label="State/Province"
+                  {...register('state')}
+                  placeholder="State"
+                />
+                <Input
+                  label="City"
+                  {...register('town_city')}
+                  placeholder="City"
+                />
+                <Input
+                  label="Address"
+                  {...register('address')}
+                  placeholder="Address"
+                />
               </div>
             </div>
-          </div>
 
-          {/* Right Column (Sidebar) */}
-          <div className="space-y-6">
             {/* Account Settings Card */}
             <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 shadow-sm">
               <h3 className="text-lg font-bold text-(--color-text) mb-4">
@@ -159,15 +173,11 @@ const CreateUser = () => {
                 )}
               </div>
             </div>
+          </div>
 
-            {/* Actions Card */}
-            <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 shadow-sm space-y-3">
-              <h3 className="text-lg font-bold text-(--color-text) mb-4">
-                Actions
-              </h3>
-              <Button type="submit" isLoading={createUserPending} fullWidth>
-                Create User
-              </Button>
+          {/* Actions (Centered) */}
+          <div className="lg:col-span-3 flex justify-center pt-6">
+            <div className="flex items-center gap-4 w-full max-w-md">
               <Button
                 type="button"
                 variant="outline"
@@ -175,6 +185,9 @@ const CreateUser = () => {
                 fullWidth
               >
                 Cancel
+              </Button>
+              <Button type="submit" isLoading={createUserPending} fullWidth>
+                Create
               </Button>
             </div>
           </div>
