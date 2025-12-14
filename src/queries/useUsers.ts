@@ -13,10 +13,10 @@ export const useUsers = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const useGetUsers = (page = 1, perPage = 20) => {
+  const useGetUsers = (page = 1, perPage = 20, search?: string) => {
     return useQuery({
-      queryKey: ['users', page, perPage],
-      queryFn: () => userService.getAll(page, perPage),
+      queryKey: ['users', page, perPage, search],
+      queryFn: () => userService.getAll(page, perPage, search),
     });
   };
 

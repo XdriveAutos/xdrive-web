@@ -10,10 +10,14 @@ import {
 } from '@/interfaces';
 
 export const userService = {
-  getAll: async (page = 1, perPage = 20): Promise<GetUsersResponse> => {
+  getAll: async (
+    page = 1,
+    perPage = 20,
+    search?: string,
+  ): Promise<GetUsersResponse> => {
     try {
       const response = await api.get<GetUsersResponse>('/admin/users', {
-        params: { page, per_page: perPage },
+        params: { page, per_page: perPage, search },
       });
       return response.data;
     } catch (error) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageHeader from '@/components/PageHeader';
 import {
@@ -11,6 +11,7 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   PhoneIcon,
+  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import { useUsers } from '@/queries/useUsers';
 import { Button, Loading, Pagination } from '@/components';
@@ -25,6 +26,29 @@ const Users = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get('search') || '',
+  );
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        if (searchInput) {
+          newParams.set('search', searchInput);
+        } else {
+          newParams.delete('search');
+        }
+        // Reset to page 1 if search changes
+        if (prev.get('search') !== searchInput) {
+          newParams.set('page', '1');
+        }
+        return newParams;
+      });
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchInput, setSearchParams]);
 
   const {
     useGetUsers,
@@ -34,7 +58,11 @@ const Users = () => {
     verifyUserEmail,
   } = useUsers();
 
-  const { data: usersResponse, isLoading: usersLoading } = useGetUsers(page);
+  const { data: usersResponse, isLoading: usersLoading } = useGetUsers(
+    page,
+    20,
+    searchParams.get('search') || undefined,
+  );
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
@@ -139,6 +167,21 @@ const Users = () => {
         >
           Create User
         </Button>
+      </div>
+
+      <div className="mb-6 max-w-md">
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            className="block w-full rounded-xl border border-(--color-border) bg-(--color-surface) py-2.5 pl-10 pr-3 text-sm text-(--color-text) placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-blue-500/50 transition-colors"
+            placeholder="Search users by name, email..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="mt-8">
