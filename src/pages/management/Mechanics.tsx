@@ -14,7 +14,12 @@ import {
 import PageHeader from '@/components/PageHeader';
 import { Button, Loading, Pagination, Input } from '@/components';
 import { useMechanics } from '@/queries/useMechanics';
-import { Mechanic, RejectMechanicRequest } from '@/interfaces/mechanic';
+import {
+  Mechanic,
+  RejectMechanicRequest,
+  MechanicQueryParams,
+} from '@/interfaces/mechanic';
+import { MechanicsFilter } from './components/MechanicsFilter';
 import {
   MechanicDeleteModal,
   MechanicVerifyModal,
@@ -29,7 +34,47 @@ const Mechanics = () => {
   const { useGetMechanics, deleteMechanic, verifyMechanic, rejectMechanic } =
     useMechanics();
 
-  const { data: mechanicsData, isLoading } = useGetMechanics(page);
+  const currentFilters: MechanicQueryParams = {
+    search: searchParams.get('search') || undefined,
+    verified: searchParams.get('verified') || undefined,
+    service: searchParams.get('service') || undefined,
+    minExperience: searchParams.get('minExperience')
+      ? Number(searchParams.get('minExperience'))
+      : undefined,
+    state: searchParams.get('state') || undefined,
+    city: searchParams.get('city') || undefined,
+    minRating: searchParams.get('minRating')
+      ? Number(searchParams.get('minRating'))
+      : undefined,
+    availableDay: searchParams.get('availableDay') || undefined,
+    sortBy: searchParams.get('sortBy') || undefined,
+    order: (searchParams.get('order') as 'asc' | 'desc') || undefined,
+  };
+
+  const { data: mechanicsData, isLoading } = useGetMechanics({
+    page,
+    per_page: 20,
+    ...currentFilters,
+  });
+
+  const handleApplyFilters = (filters: MechanicQueryParams) => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        newParams.set(key, value.toString());
+      }
+    });
+    setSearchParams(newParams);
+  };
+
+  const handleClearFilters = () => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+    setSearchParams(newParams);
+    setSearchQuery('');
+  };
   const mechanicsList = mechanicsData?.data?.data || [];
   const pagination = mechanicsData?.data?.pagination;
 
@@ -128,12 +173,21 @@ const Mechanics = () => {
           description="Manage mechanics, verify profiles, and handle applications."
           icon={<WrenchScrewdriverIcon className="h-12 w-12" />}
         />
-        <div className="w-full sm:w-72">
-          <Input
-            placeholder="Search mechanics..."
-            leftIcon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="w-full sm:w-72">
+            <Input
+              placeholder="Search mechanics..."
+              leftIcon={
+                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+              }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <MechanicsFilter
+            currentFilters={currentFilters}
+            onApply={handleApplyFilters}
+            onClear={handleClearFilters}
           />
         </div>
       </div>

@@ -1,11 +1,21 @@
 import { api, handleApiError } from '@/shared';
-import { GetWorkshopsResponse, RejectWorkshopRequest } from '@/interfaces';
+import {
+  GetWorkshopsResponse,
+  RejectWorkshopRequest,
+  WorkshopQueryParams,
+} from '@/interfaces';
 
 export const workshopService = {
-  getAll: async (page = 1, perPage = 20): Promise<GetWorkshopsResponse> => {
+  getAll: async (
+    params: WorkshopQueryParams = {},
+  ): Promise<GetWorkshopsResponse> => {
     try {
       const response = await api.get<GetWorkshopsResponse>('/admin/workshops', {
-        params: { page, per_page: perPage },
+        params: {
+          page: params.page || 1,
+          per_page: params.per_page || 20,
+          ...params,
+        },
       });
       return response.data;
     } catch (error) {
@@ -13,12 +23,18 @@ export const workshopService = {
     }
   },
 
-  getPending: async (page = 1, perPage = 20): Promise<GetWorkshopsResponse> => {
+  getPending: async (
+    params: WorkshopQueryParams = {},
+  ): Promise<GetWorkshopsResponse> => {
     try {
       const response = await api.get<GetWorkshopsResponse>(
         '/admin/workshops/pending',
         {
-          params: { page, per_page: perPage },
+          params: {
+            page: params.page || 1,
+            per_page: params.per_page || 20,
+            ...params,
+          },
         },
       );
       return response.data;

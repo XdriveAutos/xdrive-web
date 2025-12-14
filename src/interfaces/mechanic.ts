@@ -41,3 +41,18 @@ export interface RejectMechanicRequest {
 // Response types
 export type GetMechanicsResponse = BaseResponse<PaginatedData<Mechanic>>;
 export type GetMechanicResponse = BaseResponse<Mechanic>;
+
+export interface MechanicQueryParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  verified?: string;
+  service?: string;
+  minExperience?: number;
+  state?: string;
+  city?: string;
+  minRating?: number;
+  availableDay?: string;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+}

@@ -1,11 +1,21 @@
 import { api, handleApiError } from '@/shared';
-import { GetMechanicsResponse, RejectMechanicRequest } from '@/interfaces';
+import {
+  GetMechanicsResponse,
+  RejectMechanicRequest,
+  MechanicQueryParams,
+} from '@/interfaces';
 
 export const mechanicService = {
-  getAll: async (page = 1, perPage = 20): Promise<GetMechanicsResponse> => {
+  getAll: async (
+    params: MechanicQueryParams = {},
+  ): Promise<GetMechanicsResponse> => {
     try {
       const response = await api.get<GetMechanicsResponse>('/admin/mechanics', {
-        params: { page, per_page: perPage },
+        params: {
+          page: params.page || 1,
+          per_page: params.per_page || 20,
+          ...params,
+        },
       });
       return response.data;
     } catch (error) {
@@ -13,12 +23,18 @@ export const mechanicService = {
     }
   },
 
-  getPending: async (page = 1, perPage = 20): Promise<GetMechanicsResponse> => {
+  getPending: async (
+    params: MechanicQueryParams = {},
+  ): Promise<GetMechanicsResponse> => {
     try {
       const response = await api.get<GetMechanicsResponse>(
         '/admin/mechanics/pending',
         {
-          params: { page, per_page: perPage },
+          params: {
+            page: params.page || 1,
+            per_page: params.per_page || 20,
+            ...params,
+          },
         },
       );
       return response.data;

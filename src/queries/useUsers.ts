@@ -7,16 +7,17 @@ import type {
   UpdateUserRoleRequest,
   UpdateProfileRequest,
   ChangePasswordRequest,
+  UserQueryParams,
 } from '@/interfaces';
 
 export const useUsers = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const useGetUsers = (page = 1, perPage = 20, search?: string) => {
+  const useGetUsers = (params: UserQueryParams = {}) => {
     return useQuery({
-      queryKey: ['users', page, perPage, search],
-      queryFn: () => userService.getAll(page, perPage, search),
+      queryKey: ['users', params],
+      queryFn: () => userService.getAll(params),
     });
   };
 

@@ -68,6 +68,24 @@ export interface Car {
 export type GetCarsResponse = BaseResponse<PaginatedData<Car>>;
 export type GetCarResponse = BaseResponse<Car>;
 
+export interface CarQueryParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minYear?: number;
+  state?: string;
+  condition?: string;
+  listingType?: string;
+  status?: string;
+  user?: string;
+  flagged?: boolean;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+}
+
 // Requests
 export interface UpdateCarRequest {
   title?: string;

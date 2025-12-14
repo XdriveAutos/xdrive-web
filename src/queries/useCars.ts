@@ -1,16 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { UpdateCarRequest, RejectCarRequest } from '@/interfaces';
+import type {
+  UpdateCarRequest,
+  RejectCarRequest,
+  CarQueryParams,
+} from '@/interfaces';
 import { carService } from '@/services';
 
 export const useCars = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const useGetCars = (page = 1, status?: string, search?: string) => {
+  const useGetCars = (params: CarQueryParams = {}) => {
     return useQuery({
-      queryKey: ['cars', page, status, search],
-      queryFn: () => carService.getAll(page, status, search),
+      queryKey: ['cars', params],
+      queryFn: () => carService.getAll(params),
     });
   };
 

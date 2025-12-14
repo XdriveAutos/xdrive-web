@@ -101,3 +101,18 @@ export interface ChangePasswordRequest {
 // Response types
 export type GetUsersResponse = BaseResponse<PaginatedData<User>>;
 export type GetUserResponse = BaseResponse<User>;
+
+export interface UserQueryParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  status?: string;
+  role?: string;
+  verified?: string;
+  state?: string;
+  country?: string;
+  createdFrom?: string;
+  createdTo?: string;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+}

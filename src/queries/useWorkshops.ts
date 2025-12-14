@@ -1,23 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { RejectWorkshopRequest } from '@/interfaces';
+import type { RejectWorkshopRequest, WorkshopQueryParams } from '@/interfaces';
 import { workshopService } from '@/services';
 
 export const useWorkshops = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const useGetWorkshops = (page = 1, perPage = 20) => {
+  const useGetWorkshops = (params: WorkshopQueryParams = {}) => {
     return useQuery({
-      queryKey: ['workshops', page, perPage],
-      queryFn: () => workshopService.getAll(page, perPage),
+      queryKey: ['workshops', params],
+      queryFn: () => workshopService.getAll(params),
     });
   };
 
-  const useGetPendingWorkshops = (page = 1, perPage = 20) => {
+  const useGetPendingWorkshops = (params: WorkshopQueryParams = {}) => {
     return useQuery({
-      queryKey: ['workshops', 'pending', page, perPage],
-      queryFn: () => workshopService.getPending(page, perPage),
+      queryKey: ['workshops', 'pending', params],
+      queryFn: () => workshopService.getPending(params),
     });
   };
 

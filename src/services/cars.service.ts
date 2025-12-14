@@ -4,23 +4,22 @@ import {
   GetCarResponse,
   UpdateCarRequest,
   RejectCarRequest,
+  CarQueryParams,
 } from '@/interfaces';
 
 export const carService = {
-  getAll: async (
-    page = 1,
-    status?: string,
-    search?: string,
-  ): Promise<GetCarsResponse> => {
+  getAll: async (params: CarQueryParams = {}): Promise<GetCarsResponse> => {
     try {
-      const params = new URLSearchParams({
-        page: page.toString(),
+      const queryParams = new URLSearchParams();
+      if (!params.page) queryParams.set('page', '1');
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.set(key, value.toString());
+        }
       });
-      if (status) params.append('status', status);
-      if (search) params.append('search', search);
 
       const response = await api.get<GetCarsResponse>(
-        `/admin/cars?${params.toString()}`,
+        `/admin/cars?${queryParams.toString()}`,
       );
       return response.data;
     } catch (error) {

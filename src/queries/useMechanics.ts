@@ -1,23 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { RejectMechanicRequest } from '@/interfaces';
+import type { RejectMechanicRequest, MechanicQueryParams } from '@/interfaces';
 import { mechanicService } from '@/services';
 
 export const useMechanics = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const useGetMechanics = (page = 1, perPage = 20) => {
+  const useGetMechanics = (params: MechanicQueryParams = {}) => {
     return useQuery({
-      queryKey: ['mechanics', page, perPage],
-      queryFn: () => mechanicService.getAll(page, perPage),
+      queryKey: ['mechanics', params],
+      queryFn: () => mechanicService.getAll(params),
     });
   };
 
-  const useGetPendingMechanics = (page = 1, perPage = 20) => {
+  const useGetPendingMechanics = (params: MechanicQueryParams = {}) => {
     return useQuery({
-      queryKey: ['mechanics', 'pending', page, perPage],
-      queryFn: () => mechanicService.getPending(page, perPage),
+      queryKey: ['mechanics', 'pending', params],
+      queryFn: () => mechanicService.getPending(params),
     });
   };
 

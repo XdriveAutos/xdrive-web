@@ -7,7 +7,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   StarIcon,
-  FunnelIcon,
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { useCars } from '@/queries/useCars';
@@ -21,7 +20,8 @@ import {
   FeatureCarModal,
   ApproveCarModal,
 } from '@/components';
-import { Car } from '@/interfaces';
+import { Car, CarQueryParams } from '@/interfaces';
+import { CarsFilter } from './components/CarsFilter';
 import { formatCurrency } from '@/shared/formatters';
 import PageHeader from '@/components/PageHeader';
 
@@ -31,6 +31,29 @@ const Cars = () => {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const statusParam = searchParams.get('status') || 'all';
   const searchParam = searchParams.get('search') || '';
+
+  const currentFilters: CarQueryParams = {
+    page,
+    status: statusParam === 'all' ? undefined : statusParam,
+    search: searchParam || undefined,
+    brand: searchParams.get('brand') || undefined,
+    minPrice: searchParams.get('minPrice')
+      ? Number(searchParams.get('minPrice'))
+      : undefined,
+    maxPrice: searchParams.get('maxPrice')
+      ? Number(searchParams.get('maxPrice'))
+      : undefined,
+    minYear: searchParams.get('minYear')
+      ? Number(searchParams.get('minYear'))
+      : undefined,
+    state: searchParams.get('state') || undefined,
+    condition: searchParams.get('condition') || undefined,
+    listingType: searchParams.get('listingType') || undefined,
+    user: searchParams.get('user') || undefined,
+    flagged: searchParams.get('flagged') === 'true' ? true : undefined,
+    sortBy: searchParams.get('sortBy') || undefined,
+    order: (searchParams.get('order') as 'asc' | 'desc') || undefined,
+  };
 
   const {
     useGetCars,
@@ -44,11 +67,34 @@ const Cars = () => {
     approveCarPending,
   } = useCars();
 
-  const { data: carsData, isLoading: carsLoading } = useGetCars(
-    page,
-    statusParam === 'all' ? undefined : statusParam,
-    searchParam,
-  );
+  const { data: carsData, isLoading: carsLoading } = useGetCars(currentFilters);
+
+  const handleApplyFilters = (filters: CarQueryParams) => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        newParams.set(key, value.toString());
+      }
+    });
+    setSearchParams(newParams);
+
+    if (filters.status) {
+      setActiveTab(filters.status);
+    } else {
+      setActiveTab('all');
+    }
+  };
+
+  const handleClearFilters = () => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+    newParams.set('status', 'all');
+    setSearchParams(newParams);
+    setSearch('');
+    setActiveTab('all');
+  };
 
   const [search, setSearch] = useState(searchParam);
   const [activeTab, setActiveTab] = useState(statusParam);
@@ -96,7 +142,9 @@ const Cars = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams({ page: newPage.toString(), status: activeTab, search });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', newPage.toString());
+    setSearchParams(newParams);
   };
 
   const handleDelete = async () => {
@@ -194,7 +242,10 @@ const Cars = () => {
             ))}
           </div>
 
-          <form onSubmit={handleSearch} className="flex gap-2 w-full md:w-auto">
+          <form
+            onSubmit={handleSearch}
+            className="flex flex-col md:flex-row gap-2 w-full md:w-auto"
+          >
             <div className="flex-1 md:w-64 md:flex-none">
               <Input
                 placeholder="Search cars..."
@@ -203,13 +254,11 @@ const Cars = () => {
                 className="h-10 w-full"
               />
             </div>
-            <Button
-              type="submit"
-              variant="outline"
-              icon={<FunnelIcon className="h-5 w-5" />}
-            >
-              Filter
-            </Button>
+            <CarsFilter
+              currentFilters={currentFilters}
+              onApply={handleApplyFilters}
+              onClear={handleClearFilters}
+            />
           </form>
         </div>
       </div>

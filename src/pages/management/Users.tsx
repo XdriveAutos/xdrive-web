@@ -20,7 +20,8 @@ import {
   UserSuspendModal,
   UserActivateModal,
 } from '@/components/User';
-import { User } from '@/interfaces/users';
+import { UsersFilter } from './components/UsersFilter';
+import { User, UserQueryParams } from '@/interfaces';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -58,11 +59,43 @@ const Users = () => {
     verifyUserEmail,
   } = useUsers();
 
-  const { data: usersResponse, isLoading: usersLoading } = useGetUsers(
+  const currentFilters: UserQueryParams = {
+    search: searchParams.get('search') || undefined,
+    status: searchParams.get('status') || undefined,
+    role: searchParams.get('role') || undefined,
+    verified: searchParams.get('verified') || undefined,
+    state: searchParams.get('state') || undefined,
+    country: searchParams.get('country') || undefined,
+    createdFrom: searchParams.get('createdFrom') || undefined,
+    createdTo: searchParams.get('createdTo') || undefined,
+    sortBy: searchParams.get('sortBy') || undefined,
+    order: (searchParams.get('order') as 'asc' | 'desc') || undefined,
+  };
+
+  const { data: usersResponse, isLoading: usersLoading } = useGetUsers({
     page,
-    20,
-    searchParams.get('search') || undefined,
-  );
+    per_page: 20,
+    ...currentFilters,
+  });
+
+  const handleApplyFilters = (filters: UserQueryParams) => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        newParams.set(key, value.toString());
+      }
+    });
+    setSearchParams(newParams);
+  };
+
+  const handleClearFilters = () => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', '1');
+    setSearchParams(newParams);
+    setSearchInput('');
+  };
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
@@ -169,8 +202,8 @@ const Users = () => {
         </Button>
       </div>
 
-      <div className="mb-6 max-w-md">
-        <div className="relative">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="flex-1 max-w-md relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
           </div>
@@ -182,6 +215,11 @@ const Users = () => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
+        <UsersFilter
+          currentFilters={currentFilters}
+          onApply={handleApplyFilters}
+          onClear={handleClearFilters}
+        />
       </div>
 
       <div className="mt-8">

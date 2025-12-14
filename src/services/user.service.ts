@@ -7,17 +7,18 @@ import {
   ChangePasswordRequest,
   GetUsersResponse,
   GetUserResponse,
+  UserQueryParams,
 } from '@/interfaces';
 
 export const userService = {
-  getAll: async (
-    page = 1,
-    perPage = 20,
-    search?: string,
-  ): Promise<GetUsersResponse> => {
+  getAll: async (params: UserQueryParams = {}): Promise<GetUsersResponse> => {
     try {
       const response = await api.get<GetUsersResponse>('/admin/users', {
-        params: { page, per_page: perPage, search },
+        params: {
+          page: params.page || 1,
+          per_page: params.per_page || 20,
+          ...params,
+        },
       });
       return response.data;
     } catch (error) {

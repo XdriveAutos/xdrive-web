@@ -42,3 +42,18 @@ export interface RejectWorkshopRequest {
 // Response types
 export type GetWorkshopsResponse = BaseResponse<PaginatedData<Workshop>>;
 export type GetWorkshopResponse = BaseResponse<Workshop>;
+
+export interface WorkshopQueryParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  verified?: string;
+  service?: string;
+  minMechanics?: number;
+  state?: string;
+  city?: string;
+  minRating?: number;
+  availableDay?: string;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+}
