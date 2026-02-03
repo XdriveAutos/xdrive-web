@@ -81,7 +81,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 className="p-1 rounded-lg hover:bg-elevation-2 transition-colors focus:outline-none"
                 onClick={(e) => {
                   e.preventDefault();
-                  // Trigger click on the actual button inside rightIcon
                   const button = e.currentTarget.querySelector('button');
                   button?.click();
                 }}
@@ -101,7 +100,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           errorMessage ||
           (typeof error === 'string' && error)) && (
           <p
-            className={`text-sm ${error ? 'text-(--color-error)' : 'text-(--color-body)'}`}
+            className={`text-sm ${error ? 'text-red-600' : 'text-(--color-body)'}`}
           >
             {typeof error === 'string' ? error : errorMessage || helperText}
           </p>

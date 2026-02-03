@@ -6,5 +6,5 @@ export const validateEmailDomain = (email: string): boolean | string => {
   if (email.endsWith('@xdrive.com') || email.endsWith('@xdriveautos.com')) {
     return true;
   }
-  return 'Email must end with @xdrive.com or @xdriveautos.com';
+  return 'This email address is not accepted';
 };
